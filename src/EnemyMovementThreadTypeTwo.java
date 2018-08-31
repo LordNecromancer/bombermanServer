@@ -16,7 +16,7 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
     private GameComponent down;
     private GameComponent right;
     private GameComponent left;
-    private MoveEnemyRandomly moveEnemyRandomly = new MoveEnemyRandomly();
+    private MovingEnemyRandomly movingEnemyRandomly = new MovingEnemyRandomly();
     int k = 0;
     private ArrayList<GameComponent> chooseDirection = new ArrayList<>();
     ;
@@ -74,7 +74,7 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
                                 if (j + 1 > 0 && !(creatingGameBoard.gameComponents[i][j + 1].neverPassable)) {
                                     right.passable = true;
                                 }
-                            }else {
+                            } else {
 
 
                                 if (up.passable) {
@@ -225,7 +225,7 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
 //                        }
 //                    }
                     int randomNum = getRandomDirection();
-                    moveEnemyRandomly.move(creatingGameBoard, i, j, enemy, randomNum, chooseDirection);
+                    movingEnemyRandomly.move(creatingGameBoard, i, j, enemy, randomNum, chooseDirection);
                     if (round.get(enemy) == 9) {
                         round.put(enemy, -1);
                     }
@@ -244,11 +244,11 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
 
     private void nextLocation(EnemyLvL4 enemy, int i, int j) {
 
-            enemy.disappearedObject.passable = false;
+        enemy.disappearedObject.passable = false;
 
-            creatingGameBoard.setGameComponents(i, j, enemy.disappearedObject);
-            creatingGameBoard.gameComponents[i][j].passable = false;
-            enemy.disappearedObject = null;
+        creatingGameBoard.setGameComponents(i, j, enemy.disappearedObject);
+        creatingGameBoard.gameComponents[i][j].passable = false;
+        enemy.disappearedObject = null;
 
 
     }

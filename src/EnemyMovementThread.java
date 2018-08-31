@@ -17,7 +17,7 @@ public class EnemyMovementThread extends Thread implements Serializable {
     private GameComponent down;
     private GameComponent right;
     private GameComponent left;
-    private MoveEnemyRandomly moveEnemyRandomly = new MoveEnemyRandomly();
+    private MovingEnemyRandomly movingEnemyRandomly = new MovingEnemyRandomly();
     int k = 0;
     private ArrayList<GameComponent> chooseDirection = new ArrayList<>();
     ;
@@ -113,7 +113,7 @@ public class EnemyMovementThread extends Thread implements Serializable {
 
         int randomNum = getRandomDirection();
         if (randomNum != -1) {
-            moveEnemyRandomly.move(creatingGameBoard, i, j, enemy, randomNum, chooseDirection);
+            movingEnemyRandomly.move(creatingGameBoard, i, j, enemy, randomNum, chooseDirection);
         }
     }
 
@@ -128,7 +128,7 @@ public class EnemyMovementThread extends Thread implements Serializable {
             round.put(enemy, round.get(enemy) + 1);
             int randomNum = getRandomDirection();
             if (randomNum != -1) {
-                moveEnemyRandomly.move(creatingGameBoard, i, j, enemy, randomNum, chooseDirection);
+                movingEnemyRandomly.move(creatingGameBoard, i, j, enemy, randomNum, chooseDirection);
             }
             if (round.get(enemy) == 9) {
                 round.put(enemy, -1);
@@ -168,7 +168,7 @@ public class EnemyMovementThread extends Thread implements Serializable {
 
                 } else {
                     round.put(enemy, 0);
-                    moveEnemyRandomly.move(creatingGameBoard, i, j, enemy, getRandomDirection(), chooseDirection);
+                    movingEnemyRandomly.move(creatingGameBoard, i, j, enemy, getRandomDirection(), chooseDirection);
                 }
             }
         }

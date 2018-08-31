@@ -5,8 +5,9 @@ import java.util.ArrayList;
 /**
  * Created by Sun on 07/25/2018.
  */
-public class MoveEnemyRandomly implements Serializable {
+public class MovingEnemyRandomly implements Serializable {
     CreatingGameBoard creatingGameBoard;
+
     public synchronized void move(CreatingGameBoard creatingGameBoard, int i, int j, Enemy enemy, int randomNum, ArrayList<GameComponent> chooseDirection) throws IOException {
 
         this.creatingGameBoard = creatingGameBoard;
@@ -73,6 +74,7 @@ public class MoveEnemyRandomly implements Serializable {
             }
         }
     }
+
     private void nextLocation(Enemy enemy, int i, int j) {
         if (!creatingGameBoard.gameComponents[i][j].neverPassable) {
 
@@ -84,11 +86,10 @@ public class MoveEnemyRandomly implements Serializable {
     private void currentLocation(Enemy enemy, int i, int j) {
 
 
-
         creatingGameBoard.setGameComponents(i, j, enemy.disappearedObject);
         enemy.disappearedObject = null;
 
 
     }
-    }
+}
 
