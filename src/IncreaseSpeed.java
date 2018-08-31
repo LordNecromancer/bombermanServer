@@ -7,11 +7,11 @@ public class IncreaseSpeed extends PowerUps implements Serializable {
     final private String type = "increaseSpeed";
     private static final long serialVersionUID = 1113799434508336969L;
 
-    CreateBoard createBoard;
+    CreatingGameBoard creatingGameBoard;
     Player player;
 
-    public IncreaseSpeed(CreateBoard createBoard) {
-        this.createBoard = createBoard;
+    public IncreaseSpeed(CreatingGameBoard creatingGameBoard) {
+        this.creatingGameBoard = creatingGameBoard;
         this.player = player;
         super.type = type;
     }

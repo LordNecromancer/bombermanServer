@@ -72,20 +72,20 @@ public class ClientThread extends Thread implements Serializable {
                         this.roomName = line.substring(10);
                         createGame();
                     } else if (line.equals("#getRoomsList$")) {
-                        Main.getRoomsList(this);
+                        Main.sendRoomList(this);
                     } else if (line.equals("#bomb$")) {
-                        CreateBoard.createBoard.plantBomb(player);
+                        CreatingGameBoard.creatingGameBoard.plantBomb(player);
                     } else if (line.startsWith("#playerX$")) {
                         playerX = Integer.valueOf(line.substring(9));
-                        //   CreateBoard.createBoard.player.playerPositionX=Integer.valueOf(line.substring(8));
+                        //   CreatingGameBoard.creatingGameBoard.player.playerPositionX=Integer.valueOf(line.substring(8));
                     } else if (line.equals("#now$")) {
-                        CreateBoard.createBoard.explodeNow(player);
+                        CreatingGameBoard.creatingGameBoard.explodeNow(player);
 
                     } else if (line.startsWith("#playerY$")) {
 
                         playerY = Integer.valueOf(line.substring(9));
-                        CreateBoard.createBoard.setPlayerPosition(player, playerX, playerY);
-                        //  CreateBoard.createBoard.player.playerPositionY=Integer.valueOf(line.substring(8));
+                        CreatingGameBoard.creatingGameBoard.setPlayerPosition(player, playerX, playerY);
+                        //  CreatingGameBoard.creatingGameBoard.player.playerPositionY=Integer.valueOf(line.substring(8));
                     }
 //                        } else {
 //                            handlingUserMassages(line);
@@ -127,11 +127,11 @@ public class ClientThread extends Thread implements Serializable {
     }
 
     private void joinRoom(String line) throws IOException {
-        gameRoom = Main.joinChatRoom(this, line);
+        gameRoom = Main.joinGameRoom(this, line);
         if (gameRoom != null) {
             send("JoinedGameRoom$");
             player = new Player(name, this);
-            gameRoom.createBoard.addPlayer(player);
+            gameRoom.creatingGameBoard.addPlayer(player);
             gameRoom.players.add(player);
             sendTime();
             justJoinedChatRoom = true;
@@ -142,7 +142,7 @@ public class ClientThread extends Thread implements Serializable {
     }
 
     void sendTime() throws IOException {
-        send("#time$" + gameRoom.createBoard.gameTime.getTime());
+        send("#time$" + gameRoom.creatingGameBoard.gameTime.getTime());
     }
 
     private void createGame() throws IOException {
@@ -180,7 +180,7 @@ public class ClientThread extends Thread implements Serializable {
 
             isActive = false;
             gameRoom.members.remove(this);
-            gameRoom.createBoard.updatePlayerPosition(player);
+            gameRoom.creatingGameBoard.updatePlayerPosition(player);
             socket.close();
             Main.sockets.remove(this);
         }

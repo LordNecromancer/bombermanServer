@@ -26,7 +26,7 @@ public class Main implements Serializable {
     }
 
 
-    static Game joinChatRoom(ClientThread client, String gameRoomName) throws IOException {
+    static Game joinGameRoom(ClientThread client, String gameRoomName) throws IOException {
         for (Game game : games) {
             if (game.roomName.equals(gameRoomName)) {
                 game.members.add(client);
@@ -39,7 +39,7 @@ public class Main implements Serializable {
         return null;
     }
 
-    static void getRoomsList(ClientThread client) throws IOException {
+    static void sendRoomList(ClientThread client) throws IOException {
 
         for (int i = 0; i < games.size(); i++) {
             client.send(games.get(i).roomName);

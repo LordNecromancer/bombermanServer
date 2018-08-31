@@ -12,7 +12,7 @@ public class Game implements Serializable {
     int width;
     int height;
     ArrayList<Player> players = new ArrayList<>();
-    CreateBoard createBoard;
+    CreatingGameBoard creatingGameBoard;
     int level = 1;
 
 
@@ -25,23 +25,23 @@ public class Game implements Serializable {
     }
 
     public void addPlayer(Player player) throws IOException {
-        createBoard.addPlayer(player);
+        creatingGameBoard.addPlayer(player);
 
     }
 
     public void start() throws IOException {
-        createBoard = new CreateBoard(this, level, width, height);
-        createBoard.init();
-        createBoard.players = players;
+        creatingGameBoard = new CreatingGameBoard(this, level, width, height);
+        creatingGameBoard.init();
+        creatingGameBoard.players = players;
     }
 
     public void gotoNextLevel() throws IOException {
-        createBoard.level = createBoard.level + 1;
-        createBoard.gameComponents = null;
-        createBoard.init();
-        // createBoard = new CreateBoard(this, level, width, height);
-        CreateBoard.createBoard = createBoard;
-//        createBoard.init();
+        creatingGameBoard.level = creatingGameBoard.level + 1;
+        creatingGameBoard.gameComponents = null;
+        creatingGameBoard.init();
+        // creatingGameBoard = new CreatingGameBoard(this, level, width, height);
+        CreatingGameBoard.creatingGameBoard = creatingGameBoard;
+//        creatingGameBoard.init();
         for (int i = 0; i < members.size(); i++) {
             members.get(i).player.isAlive = true;
             members.get(i).sendTime();
@@ -49,7 +49,7 @@ public class Game implements Serializable {
 
         }
 
-        createBoard.players = players;
+        creatingGameBoard.players = players;
     }
 //
 //    public void sendTime(Time gameTime) throws IOException {

@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.Timer;
 
-public class CreateBoard extends JFrame implements Serializable {
+public class CreatingGameBoard extends JFrame implements Serializable {
 
     int width;
     int height;
@@ -27,12 +27,12 @@ public class CreateBoard extends JFrame implements Serializable {
     private boolean threadActive;
     ArrayList<Enemy> enemies = new ArrayList<>();
     ArrayList<Player> players = new ArrayList<>();
-    static CreateBoard createBoard;
+    static CreatingGameBoard creatingGameBoard;
     private Date date;
     private Game game;
     int level;
 
-    public CreateBoard(Game game, int level, int width, int height) {
+    public CreatingGameBoard(Game game, int level, int width, int height) {
 
         this.game = game;
         this.width = width;
@@ -44,7 +44,7 @@ public class CreateBoard extends JFrame implements Serializable {
         isMoving = false;
         threadActive = false;
         date = Date.from(Instant.now());
-        this.createBoard = this;
+        this.creatingGameBoard = this;
         obstacle = Math.min(width, height);
     }
 
@@ -75,7 +75,9 @@ public class CreateBoard extends JFrame implements Serializable {
                 if (i == 0 || j == 0 || i == w + 1 || j == h + 1) {
 
 
-                    gameComponent = new WallCell();
+                    WallCell wallCell=new WallCell();
+                    gameComponent = wallCell;
+                    wallCell.neverPassable=true;
                 } else if (i % 2 == 0 && j % 2 == 0) {
                     gameComponent = new WallCell();
                 } else {
@@ -409,13 +411,13 @@ public class CreateBoard extends JFrame implements Serializable {
 
 
     void setPlayerPosition(Player player, int playerX, int playerY) throws IOException {
-        GameComponent cell = createBoard.gameComponents[playerX][playerY];
+        GameComponent cell = creatingGameBoard.gameComponents[playerX][playerY];
 
         synchronized (gameComponents) {
 
             if (player.isAlive) {
                 if (cell instanceof StatChanger) {
-                    createBoard.checkIfIsStatChanger(player, cell);
+                    creatingGameBoard.checkIfIsStatChanger(player, cell);
                 }
 
                 if (cell.passable) {
@@ -433,9 +435,9 @@ public class CreateBoard extends JFrame implements Serializable {
                 }
 
                 if (cell.type.equals("door")) {
-                    if (createBoard.checkIfPassable()) {
-                        System.out.println(createBoard.checkIfPassable());
-                        createBoard.goToNextLevel();
+                    if (creatingGameBoard.checkIfPassable()) {
+                        System.out.println(creatingGameBoard.checkIfPassable());
+                        creatingGameBoard.goToNextLevel();
                     }
                 }
                 player.client.sendPlayerLocation();

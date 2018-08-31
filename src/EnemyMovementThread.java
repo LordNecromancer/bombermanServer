@@ -10,7 +10,7 @@ import java.util.Random;
  */
 public class EnemyMovementThread extends Thread implements Serializable {
 
-    CreateBoard createBoard;
+    CreatingGameBoard creatingGameBoard;
     private static final long serialVersionUID = 1193799434508296969L;
 
     private GameComponent up;
@@ -23,15 +23,15 @@ public class EnemyMovementThread extends Thread implements Serializable {
     ;
     private Map<Enemy, Integer> round = new HashMap<>();
 
-    EnemyMovementThread(CreateBoard createBoard) {
-        this.createBoard = createBoard;
+    EnemyMovementThread(CreatingGameBoard creatingGameBoard) {
+        this.creatingGameBoard = creatingGameBoard;
     }
 
     @Override
     public void run() {
 
-        for (int p = 0; p < createBoard.enemies.size(); p++) {
-            round.put(createBoard.enemies.get(p), -1);
+        for (int p = 0; p < creatingGameBoard.enemies.size(); p++) {
+            round.put(creatingGameBoard.enemies.get(p), -1);
         }
 
         int t = 0;
@@ -45,12 +45,12 @@ public class EnemyMovementThread extends Thread implements Serializable {
                 e.printStackTrace();
             }
 
-            for (int p = 0; p < createBoard.enemies.size(); p++) {
+            for (int p = 0; p < creatingGameBoard.enemies.size(); p++) {
                 int k = 0;
-                Enemy enemy = createBoard.enemies.get(p);
-                for (int i = 0; i < createBoard.width + 2; i++) {
-                    for (int j = 0; j < createBoard.height + 2 && k < 1; j++) {
-                        if (createBoard.gameComponents[i][j] == enemy) {
+                Enemy enemy = creatingGameBoard.enemies.get(p);
+                for (int i = 0; i < creatingGameBoard.width + 2; i++) {
+                    for (int j = 0; j < creatingGameBoard.height + 2 && k < 1; j++) {
+                        if (creatingGameBoard.gameComponents[i][j] == enemy) {
 
 
                             findPossibleDirections(i, j);
@@ -61,7 +61,7 @@ public class EnemyMovementThread extends Thread implements Serializable {
                             if (enemy.type.equals("enemyLvL1")) {
 
                                 try {
-                                    moveEnemyLevelOne((EnemyLvL1) createBoard.gameComponents[i][j], i, j);
+                                    moveEnemyLevelOne((EnemyLvL1) creatingGameBoard.gameComponents[i][j], i, j);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
@@ -85,24 +85,24 @@ public class EnemyMovementThread extends Thread implements Serializable {
     private void findPossibleDirections(int i, int j) {
         chooseDirection = new ArrayList<>();
 
-        up = createBoard.gameComponents[i - 1][j];
-        right = createBoard.gameComponents[i][j + 1];
-        down = createBoard.gameComponents[i + 1][j];
-        left = createBoard.gameComponents[i][j - 1];
+        up = creatingGameBoard.gameComponents[i - 1][j];
+        right = creatingGameBoard.gameComponents[i][j + 1];
+        down = creatingGameBoard.gameComponents[i + 1][j];
+        left = creatingGameBoard.gameComponents[i][j - 1];
 
-        if (up.passable && up.type != "wall" && up.type != "obstacle") {
+        if (up.passable) {
 
             chooseDirection.add(up);
         }
-        if (right.passable && right.type != "wall" && right.type != "obstacle") {
+        if (right.passable) {
 
             chooseDirection.add(right);
         }
-        if (down.passable && down.type != "wall" && down.type != "obstacle") {
+        if (down.passable) {
 
             chooseDirection.add(down);
         }
-        if (left.passable && left.type != "wall" && left.type != "obstacle") {
+        if (left.passable) {
 
             chooseDirection.add(left);
         }
@@ -113,7 +113,7 @@ public class EnemyMovementThread extends Thread implements Serializable {
 
         int randomNum = getRandomDirection();
         if (randomNum != -1) {
-            moveEnemyRandomly.move(createBoard, i, j, enemy, randomNum, chooseDirection);
+            moveEnemyRandomly.move(creatingGameBoard, i, j, enemy, randomNum, chooseDirection);
         }
     }
 
@@ -128,7 +128,7 @@ public class EnemyMovementThread extends Thread implements Serializable {
             round.put(enemy, round.get(enemy) + 1);
             int randomNum = getRandomDirection();
             if (randomNum != -1) {
-                moveEnemyRandomly.move(createBoard, i, j, enemy, randomNum, chooseDirection);
+                moveEnemyRandomly.move(creatingGameBoard, i, j, enemy, randomNum, chooseDirection);
             }
             if (round.get(enemy) == 9) {
                 round.put(enemy, -1);
@@ -139,36 +139,36 @@ public class EnemyMovementThread extends Thread implements Serializable {
     private void moveEnemyLevelTwoSmartly(EnemyLvL2 enemy, int i, int j) throws IOException {
         Player player = findTarget(i, j);
         if (player != null) {
-            synchronized (createBoard.gameComponents) {
+            synchronized (creatingGameBoard.gameComponents) {
                 if (up.type.equals("player") || down.type.equals("player") || right.type.equals("player") || left.type.equals("player")) {
-                    createBoard.gameComponents[player.playerPositionX][player.playerPositionY] = enemy;
-                    createBoard.gameComponents[i][j] = new FieldCell();
-                    createBoard.killPlayer(player);
+                    creatingGameBoard.gameComponents[player.playerPositionX][player.playerPositionY] = enemy;
+                    creatingGameBoard.gameComponents[i][j] = new FieldCell();
+                    creatingGameBoard.killPlayer(player);
                 }
                 if (player.playerPositionX > i && chooseDirection.contains(down)) {
 
-                    createBoard.gameComponents[i + 1][j] = enemy;
-                    createBoard.gameComponents[i][j] = new FieldCell();
+                    creatingGameBoard.gameComponents[i + 1][j] = enemy;
+                    creatingGameBoard.gameComponents[i][j] = new FieldCell();
 
 
                 } else if (player.playerPositionX < i && chooseDirection.contains(up)) {
 
-                    createBoard.gameComponents[i - 1][j] = enemy;
-                    createBoard.gameComponents[i][j] = new FieldCell();
+                    creatingGameBoard.gameComponents[i - 1][j] = enemy;
+                    creatingGameBoard.gameComponents[i][j] = new FieldCell();
 
                 } else if (player.playerPositionY > j && chooseDirection.contains(right)) {
 
-                    createBoard.gameComponents[i][j + 1] = enemy;
-                    createBoard.gameComponents[i][j] = new FieldCell();
+                    creatingGameBoard.gameComponents[i][j + 1] = enemy;
+                    creatingGameBoard.gameComponents[i][j] = new FieldCell();
 
                 } else if (player.playerPositionY < j && chooseDirection.contains(left)) {
 
-                    createBoard.gameComponents[i][j - 1] = enemy;
-                    createBoard.gameComponents[i][j] = new FieldCell();
+                    creatingGameBoard.gameComponents[i][j - 1] = enemy;
+                    creatingGameBoard.gameComponents[i][j] = new FieldCell();
 
                 } else {
                     round.put(enemy, 0);
-                    moveEnemyRandomly.move(createBoard, i, j, enemy, getRandomDirection(), chooseDirection);
+                    moveEnemyRandomly.move(creatingGameBoard, i, j, enemy, getRandomDirection(), chooseDirection);
                 }
             }
         }
@@ -176,16 +176,16 @@ public class EnemyMovementThread extends Thread implements Serializable {
 
 
     Player findTarget(int i, int j) {
-        if (createBoard.players.size() > 0) {
-            Player player = createBoard.players.get(0);
+        if (creatingGameBoard.players.size() > 0) {
+            Player player = creatingGameBoard.players.get(0);
             int distanceX = Math.abs(player.playerPositionX - i);
             int distanceY = Math.abs(player.playerPositionY - j);
-            for (int k = 0; k < createBoard.players.size(); k++) {
-                int interimX = Math.abs(i - createBoard.players.get(k).playerPositionX);
-                int interimY = Math.abs(j - createBoard.players.get(k).playerPositionY);
+            for (int k = 0; k < creatingGameBoard.players.size(); k++) {
+                int interimX = Math.abs(i - creatingGameBoard.players.get(k).playerPositionX);
+                int interimY = Math.abs(j - creatingGameBoard.players.get(k).playerPositionY);
 
                 if (interimX + interimY < distanceX + distanceY) {
-                    player = createBoard.players.get(k);
+                    player = creatingGameBoard.players.get(k);
                     distanceX = interimX;
                     distanceY = interimY;
                 }

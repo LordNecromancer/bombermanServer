@@ -7,11 +7,11 @@ public class DecreaseSpeed extends Poison implements Serializable {
     private static final long serialVersionUID = 1113799434508296969L;
 
     final private String type = "decreaseSpeed";
-    CreateBoard createBoard;
+    CreatingGameBoard creatingGameBoard;
     Player player;
 
-    public DecreaseSpeed(CreateBoard createBoard) {
-        this.createBoard = createBoard;
+    public DecreaseSpeed(CreatingGameBoard creatingGameBoard) {
+        this.creatingGameBoard = creatingGameBoard;
         super.type = type;
         this.player = player;
     }
