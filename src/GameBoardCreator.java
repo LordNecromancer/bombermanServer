@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.Timer;
 
-public class CreatingGameBoard extends JFrame implements Serializable {
+public class GameBoardCreator extends JFrame implements Serializable {
 
     int width;
     int height;
@@ -27,12 +27,12 @@ public class CreatingGameBoard extends JFrame implements Serializable {
     private boolean threadActive;
     ArrayList<Enemy> enemies = new ArrayList<>();
     ArrayList<Player> players = new ArrayList<>();
-    static CreatingGameBoard creatingGameBoard;
+    static GameBoardCreator gameBoardCreator;
     private Date date;
     private Game game;
     int level;
 
-    public CreatingGameBoard(Game game, int level, int width, int height) {
+    public GameBoardCreator(Game game, int level, int width, int height) {
 
         this.game = game;
         this.width = width;
@@ -44,8 +44,16 @@ public class CreatingGameBoard extends JFrame implements Serializable {
         isMoving = false;
         threadActive = false;
         date = Date.from(Instant.now());
-        this.creatingGameBoard = this;
+        this.gameBoardCreator = this;
         obstacle = Math.min(width, height);
+    }
+
+    public static GameBoardCreator getGameBoardCreator() {
+        return gameBoardCreator;
+    }
+
+    public long getBombExplosionTime() {
+        return bombExplosionTime;
     }
 
 
@@ -69,15 +77,12 @@ public class CreatingGameBoard extends JFrame implements Serializable {
                 GameComponent gameComponent;
 
 
-//                if (i == 1 && j == 1) {
-//                    gameComponent = game.players.get(0);
-//                }
                 if (i == 0 || j == 0 || i == w + 1 || j == h + 1) {
 
 
                     WallCell wallCell = new WallCell();
                     gameComponent = wallCell;
-                    wallCell.neverPassable = true;
+                    wallCell.setNeverPassable(true);
                 } else if (i % 2 == 0 && j % 2 == 0) {
                     gameComponent = new WallCell();
                 } else {
@@ -110,7 +115,7 @@ public class CreatingGameBoard extends JFrame implements Serializable {
             Random r = new Random();
             int n = r.nextInt(width - 1) + 1;
             int m = r.nextInt(height - 1) + 1;
-            if (gameComponents[n][m].type == "field") {
+            if (gameComponents[n][m].getType() == "field") {
 
                 if (n != 2 && m != 2) {
                     i++;
@@ -149,7 +154,7 @@ public class CreatingGameBoard extends JFrame implements Serializable {
             Random r = new Random();
             int n = r.nextInt(w - 1) + 1;
             int m = r.nextInt(h - 1) + 1;
-            if (gameComponents[n][m].type.equals("field")) {
+            if (gameComponents[n][m].getType().equals("field")) {
 
                 if (n != 2 && m != 2) {
                     k++;
@@ -168,10 +173,10 @@ public class CreatingGameBoard extends JFrame implements Serializable {
 
     private PowerUps getRandomPowerUp() {
         ArrayList<PowerUps> powerUps = new ArrayList<>();
-        powerUps.add(new IncreasingBombs());
-        powerUps.add(new IncreasingPoints(this));
-        powerUps.add(new IncreasingRadius());
-        powerUps.add(new IncreasingSpeed(this));
+        powerUps.add(new IncreasingBombsPowerUp());
+        powerUps.add(new IncreasingPointsPowerUp(this));
+        powerUps.add(new IncreasingRadiusPowerUp());
+        powerUps.add(new IncreasingSpeedPowerUp(this));
         powerUps.add(new BombControl(this));
 
         Random r = new Random();
@@ -181,10 +186,10 @@ public class CreatingGameBoard extends JFrame implements Serializable {
 
     private Poison getRandomPoison() {
         ArrayList<Poison> poisons = new ArrayList<>();
-        poisons.add(new DecreasingBombs());
-        poisons.add(new DecreasingPoints(this));
-        poisons.add(new DecreasingRadius());
-        poisons.add(new DecreasingSpeed(this));
+        poisons.add(new DecreasingBombsPoison());
+        poisons.add(new DecreasingPointsPoison(this));
+        poisons.add(new DecreasingRadiusPoison());
+        poisons.add(new DecreasingSpeedPoison(this));
         poisons.add(new LosingBombControl());
 
         Random r = new Random();
@@ -270,45 +275,32 @@ public class CreatingGameBoard extends JFrame implements Serializable {
 
 
     void killPlayer(Player player) throws IOException {
-        if (player.isAlive) {
+        if (player.isAlive()) {
 
-            player.client.send("#lost$");
+            player.getClient().send("#lost$");
         }
         player.die();
     }
 
 
     boolean isPassed(Player player) {
-        return Date.from(Instant.now()).getTime() - date.getTime() > player.playerSpeed * 100;
+        return Date.from(Instant.now()).getTime() - date.getTime() > player.getPlayerSleep() * 100;
     }
 
     void checkIfIsStatChanger(Player player, GameComponent cell) throws IOException {
 
         StatChanger statChanger = (StatChanger) cell;
-        statChanger.passable = true;
+        statChanger.setPassable(true);
         statChanger.doYourThing(player);
-    }
-
-    void plantBomb(Player player) {
-        if (player.bombCount <= player.bombNum && !player.bombSet) {
-            player.bombCount++;
-            player.bombSet = true;
-            BombCell bomb = new BombCell(player, player.bombRadius, bombExplosionTime, this, player.playerPositionX, player.playerPositionY);
-            player.bombs.add(bomb);
-            synchronized (gameComponents) {
-                gameComponents[player.playerPositionX][player.playerPositionY] = bomb;
-            }
-            player.currentBomb = bomb;
-        }
     }
 
 
     void addScore(Player player, int score) throws IOException {
 
-        if (player.score + score > 0) {
-            player.score += score;
+        if (player.getScore() + score > 0) {
+            player.setScore(player.getScore() + score);
         } else {
-            player.score = 0;
+            player.setScore(0);
         }
         sendScore();
     }
@@ -352,15 +344,15 @@ public class CreatingGameBoard extends JFrame implements Serializable {
 
         for (int i = 0; i < game.players.size(); i++) {
 
-            stringBuilder.append(game.players.get(i).name + "    :    " + game.players.get(i).score + "       ");
+            stringBuilder.append(game.players.get(i).getName() + "    :    " + game.players.get(i).getScore() + "       ");
             //  stringBuilder.append(System.getProperty("line.separator"));
 
 
         }
         for (int i = 0; i < game.players.size(); i++) {
 
-            game.players.get(i).client.send((stringBuilder.toString()));
-            game.players.get(i).client.objectOutputStream.reset();
+            game.players.get(i).getClient().send((stringBuilder.toString()));
+            game.players.get(i).getClient().getObjectOutputStream().reset();
 
         }
         System.out.println(stringBuilder.toString());
@@ -396,13 +388,13 @@ public class CreatingGameBoard extends JFrame implements Serializable {
             Random r = new Random();
             int n = r.nextInt(width - 1) + 1;
             int m = r.nextInt(height - 1) + 1;
-            if (gameComponents[n][m].type.equals("field")) {
+            if (gameComponents[n][m].getType().equals("field")) {
                 synchronized (gameComponents) {
                     gameComponents[n][m] = player;
                 }
-                player.playerPositionX = n;
-                player.playerPositionY = m;
-                player.client.sendPlayerLocation();
+                player.setPlayerPositionX(n);
+                player.setPlayerPositionY(m);
+                player.getClient().sendPlayerLocation();
                 break;
 
             }
@@ -411,46 +403,46 @@ public class CreatingGameBoard extends JFrame implements Serializable {
 
 
     void setPlayerPosition(Player player, int playerX, int playerY) throws IOException {
-        GameComponent cell = creatingGameBoard.gameComponents[playerX][playerY];
+        GameComponent cell = gameBoardCreator.gameComponents[playerX][playerY];
 
         synchronized (gameComponents) {
 
-            if (player.isAlive) {
+            if (player.isAlive()) {
                 if (cell instanceof StatChanger) {
-                    creatingGameBoard.checkIfIsStatChanger(player, cell);
+                    gameBoardCreator.checkIfIsStatChanger(player, cell);
                 }
 
-                if (cell.passable) {
+                if (cell.getPassable()) {
 
                     gameComponents[playerX][playerY] = player;
-                    if (player.bombSet) {
-                        gameComponents[player.playerPositionX][player.playerPositionY] = player.currentBomb;
+                    if (player.isBombSet()) {
+                        gameComponents[player.getPlayerPositionX()][player.getPlayerPositionY()] = player.getCurrentBomb();
                     } else {
-                        gameComponents[player.playerPositionX][player.playerPositionY] = new FieldCell();
+                        gameComponents[player.getPlayerPositionX()][player.getPlayerPositionY()] = new FieldCell();
                     }
-                    player.bombSet = false;
+                    player.setBombSet(false);
 
-                    player.playerPositionX = playerX;
-                    player.playerPositionY = playerY;
+                    player.setPlayerPositionX(playerX);
+                    player.setPlayerPositionY(playerY);
                 }
 
-                if (cell.type.equals("door")) {
-                    if (creatingGameBoard.checkIfPassable()) {
-                        System.out.println(creatingGameBoard.checkIfPassable());
-                        creatingGameBoard.goToNextLevel();
+                if (cell.getType().equals("door")) {
+                    if (gameBoardCreator.checkIfPassable()) {
+                        addScore(player, 100);
+                        gameBoardCreator.goToNextLevel();
                     }
                 }
-                player.client.sendPlayerLocation();
+                player.getClient().sendPlayerLocation();
 
             }
         }
     }
 
     public void explodeNow(Player player) {
-        if (player.bombControl && player.isAlive) {
+        if (player.isBombControl() && player.isAlive()) {
             try {
-                if (player.bombs.size() > 0) {
-                    player.bombs.get(0).bombThread.explode();
+                if (player.getBombs().size() > 0) {
+                    player.getBombs().get(0).getBombThread().explode();
                 }
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
@@ -463,13 +455,13 @@ public class CreatingGameBoard extends JFrame implements Serializable {
     void updatePlayerPosition(Player player) throws IOException {
         synchronized (gameComponents) {
             for (int i = 0; i < game.players.size(); i++) {
-                gameComponents[game.players.get(i).playerPositionX][game.players.get(i).playerPositionY] = new FieldCell();
+                gameComponents[game.players.get(i).getPlayerPositionX()][game.players.get(i).getPlayerPositionY()] = new FieldCell();
 
             }
             game.players.remove(player);
             for (int i = 0; i < game.players.size(); i++) {
-                gameComponents[game.players.get(i).playerPositionX][game.players.get(i).playerPositionY] = game.players.get(i);
-                game.players.get(i).client.sendPlayerLocation();
+                gameComponents[game.players.get(i).getPlayerPositionX()][game.players.get(i).getPlayerPositionY()] = game.players.get(i);
+                game.players.get(i).getClient().sendPlayerLocation();
             }
 
         }

@@ -7,25 +7,34 @@ import java.net.SocketException;
 
 public class ClientThread extends Thread implements Serializable {
     transient private Socket socket;
-    transient ObjectOutputStream objectOutputStream;
+    private transient ObjectOutputStream objectOutputStream;
     private transient ObjectInputStream objectInputStream;
     private boolean justJoinedChatRoom = false;
-    static ClientThread client;
+    private static ClientThread client;
     private String name = "Anonymous";
     private String roomName = null;
     private Game gameRoom;
     private int width;
     private int height;
-    Player player;
+    private Player player;
     private int playerX;
     private int playerY;
     private boolean isActive = true;
+
 
     public ClientThread(Socket socket) throws IOException {
         client = this;
         this.socket = socket;
         objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 
+    }
+
+    public static ClientThread getClient() {
+        return client;
+    }
+
+    public static void setClient(ClientThread client) {
+        ClientThread.client = client;
     }
 
 
@@ -74,18 +83,18 @@ public class ClientThread extends Thread implements Serializable {
                     } else if (line.equals("#getRoomsList$")) {
                         Main.sendRoomList(this);
                     } else if (line.equals("#bomb$")) {
-                        CreatingGameBoard.creatingGameBoard.plantBomb(player);
+                        player.plantBomb(GameBoardCreator.getGameBoardCreator());
                     } else if (line.startsWith("#playerX$")) {
                         playerX = Integer.valueOf(line.substring(9));
-                        //   CreatingGameBoard.creatingGameBoard.player.playerPositionX=Integer.valueOf(line.substring(8));
+                        //   GameBoardCreator.gameBoardCreator.player.playerPositionX=Integer.valueOf(line.substring(8));
                     } else if (line.equals("#now$")) {
-                        CreatingGameBoard.creatingGameBoard.explodeNow(player);
+                        GameBoardCreator.getGameBoardCreator().explodeNow(player);
 
                     } else if (line.startsWith("#playerY$")) {
 
                         playerY = Integer.valueOf(line.substring(9));
-                        CreatingGameBoard.creatingGameBoard.setPlayerPosition(player, playerX, playerY);
-                        //  CreatingGameBoard.creatingGameBoard.player.playerPositionY=Integer.valueOf(line.substring(8));
+                        GameBoardCreator.getGameBoardCreator().setPlayerPosition(player, playerX, playerY);
+                        //  GameBoardCreator.gameBoardCreator.player.playerPositionY=Integer.valueOf(line.substring(8));
                     }
 //                        } else {
 //                            handlingUserMassages(line);
@@ -131,7 +140,7 @@ public class ClientThread extends Thread implements Serializable {
         if (gameRoom != null) {
             send("JoinedGameRoom$");
             player = new Player(name, this);
-            gameRoom.creatingGameBoard.addPlayer(player);
+            gameRoom.gameBoardCreator.addPlayer(player);
             gameRoom.players.add(player);
             sendTime();
             justJoinedChatRoom = true;
@@ -142,7 +151,7 @@ public class ClientThread extends Thread implements Serializable {
     }
 
     void sendTime() throws IOException {
-        send("#time$" + gameRoom.creatingGameBoard.gameTime.getTime());
+        send("#time$" + gameRoom.gameBoardCreator.gameTime.getTime());
     }
 
     private void createGame() throws IOException {
@@ -151,7 +160,7 @@ public class ClientThread extends Thread implements Serializable {
         player = new Player(name, this);
         gameRoom = newGame;
         gameRoom.players.add(player);
-        Main.games.add(newGame);
+        Main.getGames().add(newGame);
         gameRoom.members.add(this);
         send("JoinedGameRoom$");
         gameRoom.start();
@@ -180,9 +189,9 @@ public class ClientThread extends Thread implements Serializable {
 
             isActive = false;
             gameRoom.members.remove(this);
-            gameRoom.creatingGameBoard.updatePlayerPosition(player);
+            gameRoom.gameBoardCreator.updatePlayerPosition(player);
             socket.close();
-            Main.sockets.remove(this);
+            Main.getSockets().remove(this);
         }
     }
 
@@ -192,10 +201,33 @@ public class ClientThread extends Thread implements Serializable {
     }
 
     void sendPlayerLocation() throws IOException {
-        send("#playerX$" + player.playerPositionX);
-        send("#playerY$" + player.playerPositionY);
+        send("#playerX$" + player.getPlayerPositionX());
+        send("#playerY$" + player.getPlayerPositionY());
     }
 
 
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
+    }
+
+    public ObjectOutputStream getObjectOutputStream() {
+        return objectOutputStream;
+    }
+
+    public void setObjectOutputStream(ObjectOutputStream objectOutputStream) {
+        this.objectOutputStream = objectOutputStream;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 }
 

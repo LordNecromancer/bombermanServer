@@ -1,16 +1,23 @@
 import java.io.Serializable;
 
 
-public class WallCell extends Cell implements Serializable {
+public class WallCell extends GameComponent implements Serializable {
 
     private final String type = "wall";
+    private static final long serialVersionUID = 1119742734515296969L;
+
 
     public WallCell() {
 
-        super.type = type;
-        super.passable = false;
-        super.isExplosive = false;
+        super.setType(type);
+        super.setPassable(false);
+        super.setExplosive(false);
 
+
+    }
+
+    @Override
+    public void destroy(Player player, int i, int j) {
 
     }
 }

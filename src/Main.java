@@ -7,11 +7,13 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class Main implements Serializable {
-    static ArrayList<ClientThread> sockets = new ArrayList<>();
-    static ArrayList<Game> games = new ArrayList<>();
+    private static ArrayList<ClientThread> sockets = new ArrayList<>();
+    private static ArrayList<Game> games = new ArrayList<>();
 
     public static void main(String[] args) throws IOException, NTLMException, ClassNotFoundException {
 
+//        ReceiveNewClass ReceiveNewClass =new ReceiveNewClass();
+//        ReceiveNewClass.start();
 
         int port = 8080;
         ServerSocket serverSocket = new ServerSocket(port);
@@ -43,9 +45,25 @@ public class Main implements Serializable {
 
         for (int i = 0; i < games.size(); i++) {
             client.send(games.get(i).roomName);
-            client.objectOutputStream.flush();
+            client.getObjectOutputStream().flush();
         }
 
+    }
+
+    public static ArrayList<ClientThread> getSockets() {
+        return sockets;
+    }
+
+    public static void setSockets(ArrayList<ClientThread> sockets) {
+        Main.sockets = sockets;
+    }
+
+    public static ArrayList<Game> getGames() {
+        return games;
+    }
+
+    public static void setGames(ArrayList<Game> games) {
+        Main.games = games;
     }
 }
 

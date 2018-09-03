@@ -6,17 +6,19 @@ public class BombControl extends PowerUps implements Serializable {
     private static final long serialVersionUID = 1113799434508676069L;
 
 
-    CreatingGameBoard creatingGameBoard;
+    GameBoardCreator gameBoardCreator;
     Player player;
 
-    public BombControl(CreatingGameBoard creatingGameBoard) {
+    public BombControl(GameBoardCreator gameBoardCreator) {
 
-        this.creatingGameBoard = creatingGameBoard;
-        super.type = type;
+        this.gameBoardCreator = gameBoardCreator;
+        super.setType(type);
         this.player = player;
     }
 
     public void doYourThing(Player player) {
-        player.bombControl = true;
+        player.setBombControl(true);
     }
+
+
 }

@@ -10,7 +10,7 @@ import java.util.Random;
  */
 public class EnemyMovementThread extends Thread implements Serializable {
 
-    CreatingGameBoard creatingGameBoard;
+    GameBoardCreator gameBoardCreator;
     private static final long serialVersionUID = 1193799434508296969L;
 
     private GameComponent up;
@@ -18,20 +18,19 @@ public class EnemyMovementThread extends Thread implements Serializable {
     private GameComponent right;
     private GameComponent left;
     private MovingEnemyRandomly movingEnemyRandomly = new MovingEnemyRandomly();
-    int k = 0;
+    private int k = 0;
     private ArrayList<GameComponent> chooseDirection = new ArrayList<>();
-    ;
     private Map<Enemy, Integer> round = new HashMap<>();
 
-    EnemyMovementThread(CreatingGameBoard creatingGameBoard) {
-        this.creatingGameBoard = creatingGameBoard;
+    EnemyMovementThread(GameBoardCreator gameBoardCreator) {
+        this.gameBoardCreator = gameBoardCreator;
     }
 
     @Override
     public void run() {
 
-        for (int p = 0; p < creatingGameBoard.enemies.size(); p++) {
-            round.put(creatingGameBoard.enemies.get(p), -1);
+        for (int p = 0; p < gameBoardCreator.enemies.size(); p++) {
+            round.put(gameBoardCreator.enemies.get(p), -1);
         }
 
         int t = 0;
@@ -45,12 +44,12 @@ public class EnemyMovementThread extends Thread implements Serializable {
                 e.printStackTrace();
             }
 
-            for (int p = 0; p < creatingGameBoard.enemies.size(); p++) {
+            for (int p = 0; p < gameBoardCreator.enemies.size(); p++) {
                 int k = 0;
-                Enemy enemy = creatingGameBoard.enemies.get(p);
-                for (int i = 0; i < creatingGameBoard.width + 2; i++) {
-                    for (int j = 0; j < creatingGameBoard.height + 2 && k < 1; j++) {
-                        if (creatingGameBoard.gameComponents[i][j] == enemy) {
+                Enemy enemy = gameBoardCreator.enemies.get(p);
+                for (int i = 0; i < gameBoardCreator.width + 2; i++) {
+                    for (int j = 0; j < gameBoardCreator.height + 2 && k < 1; j++) {
+                        if (gameBoardCreator.gameComponents[i][j] == enemy) {
 
 
                             findPossibleDirections(i, j);
@@ -58,17 +57,17 @@ public class EnemyMovementThread extends Thread implements Serializable {
                             k++;
 
 
-                            if (enemy.type.equals("enemyLvL1")) {
+                            if (enemy.getType().equals("enemyLvL1")) {
 
                                 try {
-                                    moveEnemyLevelOne((EnemyLvL1) creatingGameBoard.gameComponents[i][j], i, j);
+                                    moveEnemyLevelOne((EnemyLvL1) gameBoardCreator.gameComponents[i][j], i, j);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
 
                             }
 
-                            if (enemy.type.equals("enemyLvL2")) {
+                            if (enemy.getType().equals("enemyLvL2")) {
                                 try {
                                     moveEnemyLevelTwo((EnemyLvL2) enemy, i, j);
                                 } catch (IOException e) {
@@ -85,24 +84,24 @@ public class EnemyMovementThread extends Thread implements Serializable {
     private void findPossibleDirections(int i, int j) {
         chooseDirection = new ArrayList<>();
 
-        up = creatingGameBoard.gameComponents[i - 1][j];
-        right = creatingGameBoard.gameComponents[i][j + 1];
-        down = creatingGameBoard.gameComponents[i + 1][j];
-        left = creatingGameBoard.gameComponents[i][j - 1];
+        up = gameBoardCreator.gameComponents[i - 1][j];
+        right = gameBoardCreator.gameComponents[i][j + 1];
+        down = gameBoardCreator.gameComponents[i + 1][j];
+        left = gameBoardCreator.gameComponents[i][j - 1];
 
-        if (up.passable) {
+        if (up.getPassable()) {
 
             chooseDirection.add(up);
         }
-        if (right.passable) {
+        if (right.getPassable()) {
 
             chooseDirection.add(right);
         }
-        if (down.passable) {
+        if (down.getPassable()) {
 
             chooseDirection.add(down);
         }
-        if (left.passable) {
+        if (left.getPassable()) {
 
             chooseDirection.add(left);
         }
@@ -113,7 +112,7 @@ public class EnemyMovementThread extends Thread implements Serializable {
 
         int randomNum = getRandomDirection();
         if (randomNum != -1) {
-            movingEnemyRandomly.move(creatingGameBoard, i, j, enemy, randomNum, chooseDirection);
+            movingEnemyRandomly.move(gameBoardCreator, i, j, enemy, randomNum, chooseDirection);
         }
     }
 
@@ -128,7 +127,7 @@ public class EnemyMovementThread extends Thread implements Serializable {
             round.put(enemy, round.get(enemy) + 1);
             int randomNum = getRandomDirection();
             if (randomNum != -1) {
-                movingEnemyRandomly.move(creatingGameBoard, i, j, enemy, randomNum, chooseDirection);
+                movingEnemyRandomly.move(gameBoardCreator, i, j, enemy, randomNum, chooseDirection);
             }
             if (round.get(enemy) == 9) {
                 round.put(enemy, -1);
@@ -139,36 +138,36 @@ public class EnemyMovementThread extends Thread implements Serializable {
     private void moveEnemyLevelTwoSmartly(EnemyLvL2 enemy, int i, int j) throws IOException {
         Player player = findTarget(i, j);
         if (player != null) {
-            synchronized (creatingGameBoard.gameComponents) {
-                if (up.type.equals("player") || down.type.equals("player") || right.type.equals("player") || left.type.equals("player")) {
-                    creatingGameBoard.gameComponents[player.playerPositionX][player.playerPositionY] = enemy;
-                    creatingGameBoard.gameComponents[i][j] = new FieldCell();
-                    creatingGameBoard.killPlayer(player);
+            synchronized (gameBoardCreator.gameComponents) {
+                if (up.getType().equals("player") || down.getType().equals("player") || right.getType().equals("player") || left.getType().equals("player")) {
+                    gameBoardCreator.gameComponents[player.getPlayerPositionX()][player.getPlayerPositionY()] = enemy;
+                    gameBoardCreator.gameComponents[i][j] = new FieldCell();
+                    gameBoardCreator.killPlayer(player);
                 }
-                if (player.playerPositionX > i && chooseDirection.contains(down)) {
+                if (player.getPlayerPositionX() > i && chooseDirection.contains(down)) {
 
-                    creatingGameBoard.gameComponents[i + 1][j] = enemy;
-                    creatingGameBoard.gameComponents[i][j] = new FieldCell();
+                    gameBoardCreator.gameComponents[i + 1][j] = enemy;
+                    gameBoardCreator.gameComponents[i][j] = new FieldCell();
 
 
-                } else if (player.playerPositionX < i && chooseDirection.contains(up)) {
+                } else if (player.getPlayerPositionX() < i && chooseDirection.contains(up)) {
 
-                    creatingGameBoard.gameComponents[i - 1][j] = enemy;
-                    creatingGameBoard.gameComponents[i][j] = new FieldCell();
+                    gameBoardCreator.gameComponents[i - 1][j] = enemy;
+                    gameBoardCreator.gameComponents[i][j] = new FieldCell();
 
-                } else if (player.playerPositionY > j && chooseDirection.contains(right)) {
+                } else if (player.getPlayerPositionY() > j && chooseDirection.contains(right)) {
 
-                    creatingGameBoard.gameComponents[i][j + 1] = enemy;
-                    creatingGameBoard.gameComponents[i][j] = new FieldCell();
+                    gameBoardCreator.gameComponents[i][j + 1] = enemy;
+                    gameBoardCreator.gameComponents[i][j] = new FieldCell();
 
-                } else if (player.playerPositionY < j && chooseDirection.contains(left)) {
+                } else if (player.getPlayerPositionY() < j && chooseDirection.contains(left)) {
 
-                    creatingGameBoard.gameComponents[i][j - 1] = enemy;
-                    creatingGameBoard.gameComponents[i][j] = new FieldCell();
+                    gameBoardCreator.gameComponents[i][j - 1] = enemy;
+                    gameBoardCreator.gameComponents[i][j] = new FieldCell();
 
                 } else {
                     round.put(enemy, 0);
-                    movingEnemyRandomly.move(creatingGameBoard, i, j, enemy, getRandomDirection(), chooseDirection);
+                    movingEnemyRandomly.move(gameBoardCreator, i, j, enemy, getRandomDirection(), chooseDirection);
                 }
             }
         }
@@ -176,16 +175,16 @@ public class EnemyMovementThread extends Thread implements Serializable {
 
 
     Player findTarget(int i, int j) {
-        if (creatingGameBoard.players.size() > 0) {
-            Player player = creatingGameBoard.players.get(0);
-            int distanceX = Math.abs(player.playerPositionX - i);
-            int distanceY = Math.abs(player.playerPositionY - j);
-            for (int k = 0; k < creatingGameBoard.players.size(); k++) {
-                int interimX = Math.abs(i - creatingGameBoard.players.get(k).playerPositionX);
-                int interimY = Math.abs(j - creatingGameBoard.players.get(k).playerPositionY);
+        if (gameBoardCreator.players.size() > 0) {
+            Player player = gameBoardCreator.players.get(0);
+            int distanceX = Math.abs(player.getPlayerPositionX() - i);
+            int distanceY = Math.abs(player.getPlayerPositionY() - j);
+            for (int k = 0; k < gameBoardCreator.players.size(); k++) {
+                int interimX = Math.abs(i - gameBoardCreator.players.get(k).getPlayerPositionX());
+                int interimY = Math.abs(j - gameBoardCreator.players.get(k).getPlayerPositionY());
 
                 if (interimX + interimY < distanceX + distanceY) {
-                    player = creatingGameBoard.players.get(k);
+                    player = gameBoardCreator.players.get(k);
                     distanceX = interimX;
                     distanceY = interimY;
                 }
@@ -212,5 +211,13 @@ public class EnemyMovementThread extends Thread implements Serializable {
 
             return randomNum;
         }
+    }
+
+    public int getK() {
+        return k;
+    }
+
+    public void setK(int k) {
+        this.k = k;
     }
 }

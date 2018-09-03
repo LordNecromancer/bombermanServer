@@ -3,19 +3,21 @@ import java.io.Serializable;
 /**
  * Created by Sun on 06/24/2018.
  */
-public class DecreasingRadius extends Poison implements Serializable {
+public class DecreasingRadiusPoison extends Poison implements Serializable {
 
     final private String type = "decreaseRadius";
     private static final long serialVersionUID = 1113799434508286969L;
 
 
-    public DecreasingRadius() {
-        super.type = type;
+    public DecreasingRadiusPoison() {
+        super.setType(type);
     }
 
     public void doYourThing(Player player) {
-        if (player.bombRadius > 1)
+        if (player.getBombRadius() > 1)
 
-            player.bombRadius--;
+            player.setBombRadius(player.getBombRadius() - 1);
     }
+
+
 }

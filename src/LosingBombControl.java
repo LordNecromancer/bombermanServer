@@ -10,10 +10,12 @@ public class LosingBombControl extends Poison implements Serializable {
 
     public LosingBombControl() {
 
-        super.type = type;
+        super.setType(type);
     }
 
     public void doYourThing(Player player) {
-        player.bombControl = false;
+        player.setBombControl(false);
     }
+
+
 }
