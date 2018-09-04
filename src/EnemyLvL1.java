@@ -11,11 +11,13 @@ public class EnemyLvL1 extends Enemy implements Serializable {
     private int level = 1;
     static int sleep = 8;
 
+
     public EnemyLvL1() {
         super.setLevel(level);
         super.setType(type);
         super.setSleep(sleep);
         super.setPassable(false);
         super.setNeverPassable(true);
+        passableObjects.add("FieldCell");
     }
 }

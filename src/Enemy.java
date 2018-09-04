@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 
 public abstract class Enemy extends GameComponent implements Serializable {
@@ -9,6 +10,7 @@ public abstract class Enemy extends GameComponent implements Serializable {
     private boolean isGhosting = false;
     private int sleep;
     private GameComponent disappearedObject = null;
+    ArrayList<String> passableObjects=new ArrayList();
     GameBoardCreator gameBoardCreator = GameBoardCreator.getGameBoardCreator();
 
     Enemy() {

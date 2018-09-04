@@ -38,7 +38,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
         this.width = width;
         this.height = height;
         this.level = level;
-        this.level = 1;
+        this.level = 4;
         this.bombCount = bombCount;
         this.gameTime = new Time(300);
         isMoving = false;
@@ -177,7 +177,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
         powerUps.add(new IncreasingPointsPowerUp(this));
         powerUps.add(new IncreasingRadiusPowerUp());
         powerUps.add(new IncreasingSpeedPowerUp(this));
-        powerUps.add(new BombControl(this));
+        powerUps.add(new BombControlPowerUp(this));
 
         Random r = new Random();
         int m = r.nextInt(powerUps.size() - 1);
@@ -190,7 +190,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
         poisons.add(new DecreasingPointsPoison(this));
         poisons.add(new DecreasingRadiusPoison());
         poisons.add(new DecreasingSpeedPoison(this));
-        poisons.add(new LosingBombControl());
+        poisons.add(new LosingBombControlPoison());
 
         Random r = new Random();
         int m = r.nextInt(poisons.size() - 1);

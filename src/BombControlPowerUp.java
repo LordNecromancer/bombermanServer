@@ -1,7 +1,7 @@
 import java.io.Serializable;
 
 
-public class BombControl extends PowerUps implements Serializable {
+public class BombControlPowerUp extends PowerUps implements Serializable {
     final private String type = "bombControl";
     private static final long serialVersionUID = 1113799434508676069L;
 
@@ -9,7 +9,7 @@ public class BombControl extends PowerUps implements Serializable {
     GameBoardCreator gameBoardCreator;
     Player player;
 
-    public BombControl(GameBoardCreator gameBoardCreator) {
+    public BombControlPowerUp(GameBoardCreator gameBoardCreator) {
 
         this.gameBoardCreator = gameBoardCreator;
         super.setType(type);
