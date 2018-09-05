@@ -21,8 +21,6 @@ public class GameBoardCreator extends JFrame implements Serializable {
     private static long bombExplosionTime = 5;
     EnemyMovementThread enemyMove = new EnemyMovementThread(this);
     EnemyMovementThreadTypeTwo enemyMove2 = new EnemyMovementThreadTypeTwo(this);
-
-    private int bombCount = 0;
     private boolean isMoving = false;
     private boolean threadActive;
     ArrayList<Enemy> enemies = new ArrayList<>();
@@ -31,6 +29,8 @@ public class GameBoardCreator extends JFrame implements Serializable {
     private Date date;
     private Game game;
     int level;
+    private int maximumEnemyLevel = 4;
+    private Map<Integer, ArrayList<Enemy>> enemyLevelMap = new HashMap<>();
 
     public GameBoardCreator(Game game, int level, int width, int height) {
 
@@ -39,7 +39,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
         this.height = height;
         this.level = level;
         this.level = 4;
-        this.bombCount = bombCount;
+        this.enemyLevelMap = game.enemyLevelMap;
         this.gameTime = new Time(300);
         isMoving = false;
         threadActive = false;
@@ -115,7 +115,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
             Random r = new Random();
             int n = r.nextInt(width - 1) + 1;
             int m = r.nextInt(height - 1) + 1;
-            if (gameComponents[n][m].getType() == "field") {
+            if (gameComponents[n][m].getType().equals("field")) {
 
                 if (n != 2 && m != 2) {
                     i++;
@@ -130,21 +130,15 @@ public class GameBoardCreator extends JFrame implements Serializable {
 
     private Enemy createRandomEnemy() {
         int imaginaryLevel = level;
-        if (level > 4) {
-            imaginaryLevel = 4;
+        Enemy enemy;
+        if (level > maximumEnemyLevel) {
+            imaginaryLevel = maximumEnemyLevel;
         }
         int randomNum = new Random().nextInt(imaginaryLevel) + 1;
 
+        enemy = getRandomEnemyForThisLevel(randomNum);
 
-        if (randomNum == 1) {
-            return new EnemyLvL1();
-        } else if (randomNum == 2) {
-            return new EnemyLvL2();
-        } else if (randomNum == 3) {
-            return new EnemyLvL3();
-        } else {
-            return new EnemyLvL4();
-        }
+        return enemy;
     }
 
     private void createRandomObstacleCell(int w, int h) throws IOException {
@@ -375,6 +369,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
         threadActive = false;
         enemyCount = 0;
         gameTime = new Time(300);
+        game.enemyLevelMap = enemyLevelMap;
         game.gotoNextLevel();
     }
 
@@ -467,4 +462,20 @@ public class GameBoardCreator extends JFrame implements Serializable {
         }
 
     }
+
+    public Enemy getRandomEnemyForThisLevel(int i) {
+        Enemy randomEnemyForThisLevel = null;
+        ArrayList<Enemy> possibleEnemies = enemyLevelMap.get(i);
+        Random random = new Random();
+        int randomNum = random.nextInt(possibleEnemies.size());
+        try {
+            randomEnemyForThisLevel = possibleEnemies.get(randomNum).getClass().newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return randomEnemyForThisLevel;
+    }
+
 }

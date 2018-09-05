@@ -52,7 +52,7 @@ public class EnemyMovementThread extends Thread implements Serializable {
                         if (gameBoardCreator.gameComponents[i][j] == enemy) {
 
 
-                            findPossibleDirections(enemy,i, j);
+                            findPossibleDirections(enemy, i, j);
 
                             k++;
 
@@ -81,7 +81,7 @@ public class EnemyMovementThread extends Thread implements Serializable {
         }
     }
 
-    private void findPossibleDirections(Enemy enemy,int i, int j) {
+    private void findPossibleDirections(Enemy enemy, int i, int j) {
         chooseDirection = new ArrayList<>();
 
         up = gameBoardCreator.gameComponents[i - 1][j];
@@ -176,17 +176,19 @@ public class EnemyMovementThread extends Thread implements Serializable {
 
     Player findTarget(int i, int j) {
         if (gameBoardCreator.players.size() > 0) {
-            Player player = gameBoardCreator.players.get(0);
-            int distanceX = Math.abs(player.getPlayerPositionX() - i);
-            int distanceY = Math.abs(player.getPlayerPositionY() - j);
+            Player player = null;
+            int distanceX = gameBoardCreator.width;
+            int distanceY = gameBoardCreator.height;
             for (int k = 0; k < gameBoardCreator.players.size(); k++) {
-                int interimX = Math.abs(i - gameBoardCreator.players.get(k).getPlayerPositionX());
-                int interimY = Math.abs(j - gameBoardCreator.players.get(k).getPlayerPositionY());
+                if (gameBoardCreator.players.get(k).isAlive()) {
+                    int interimX = Math.abs(i - gameBoardCreator.players.get(k).getPlayerPositionX());
+                    int interimY = Math.abs(j - gameBoardCreator.players.get(k).getPlayerPositionY());
 
-                if (interimX + interimY < distanceX + distanceY) {
-                    player = gameBoardCreator.players.get(k);
-                    distanceX = interimX;
-                    distanceY = interimY;
+                    if (interimX + interimY < distanceX + distanceY) {
+                        player = gameBoardCreator.players.get(k);
+                        distanceX = interimX;
+                        distanceY = interimY;
+                    }
                 }
 
             }

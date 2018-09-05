@@ -19,5 +19,7 @@ public class EnemyLvL1 extends Enemy implements Serializable {
         super.setPassable(false);
         super.setNeverPassable(true);
         passableObjects.add("FieldCell");
+        passableObjects.add("Player");
+
     }
 }

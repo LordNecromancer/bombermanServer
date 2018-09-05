@@ -53,67 +53,8 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
                         if (gameBoardCreator.gameComponents[i][j] == enemy) {
 
 
-                            findPossibleDirections(enemy,i, j);
+                            findPossibleDirections(enemy, i, j);
 
-//                            if (enemy.isGhosting()) {
-//                                if (i - 1 > 0 && !(gameBoardCreator.gameComponents[i - 1][j].isNeverPassable())) {
-//                                    up.setPassable(true);
-//                                }
-//                                if (i + 1 > 0 && !(gameBoardCreator.gameComponents[i + 1][j].isNeverPassable())) {
-//                                    down.setPassable(true);
-//                                }
-//                                if (j - 1 > 0 && !(gameBoardCreator.gameComponents[i][j - 1].isNeverPassable())) {
-//
-//                                    left.setPassable(true);
-//                                }
-//                                if (j + 1 > 0 && !(gameBoardCreator.gameComponents[i][j + 1].isNeverPassable())) {
-//                                    right.setPassable(true);
-//                                }
-//                            } else {
-//
-//
-//                                if (up.getPassable()) {
-//
-//                                    chooseDirection.add(up);
-//
-//                                }
-//                                if (right.getPassable()) {
-//
-//                                    chooseDirection.add(right);
-//
-//                                }
-//                                if (down.getPassable()) {
-//
-//                                    chooseDirection.add(down);
-//
-//                                }
-//                                if (left.getPassable()) {
-//
-//
-//                                    chooseDirection.add(left);
-//
-//                                }
-//                            }
-
-//
-//                             else {
-//                                if (up.passable && !up.type.equals("wall") && !up.type.equals("obstacle")) {
-//
-//                                    chooseDirection.add(up);
-//                                }
-//                                if (right.passable && !right.type.equals("wall") && !right.type.equals("obstacle")) {
-//
-//                                    chooseDirection.add(right);
-//                                }
-//                                if (down.passable && !down.type.equals("wall") && !down.type.equals("obstacle")) {
-//
-//                                    chooseDirection.add(down);
-//                                }
-//                                if (left.passable && !left.type.equals("wall") && !left.type.equals("obstacle")) {
-//
-//                                    chooseDirection.add(left);
-//                                }
-//                            }
                             if (enemy.getSleep() == EnemyLvL3.sleep) {
 
                                 try {
@@ -131,7 +72,8 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
             }
         }
     }
-    private void findPossibleDirections(Enemy enemy,int i, int j) {
+
+    private void findPossibleDirections(Enemy enemy, int i, int j) {
         chooseDirection = new ArrayList<>();
 
         up = gameBoardCreator.gameComponents[i - 1][j];
@@ -139,7 +81,7 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
         down = gameBoardCreator.gameComponents[i + 1][j];
         left = gameBoardCreator.gameComponents[i][j - 1];
 
-        if (enemy.passableObjects.contains(up.getClass().getName())&& !up.isNeverPassable()) {
+        if (enemy.passableObjects.contains(up.getClass().getName()) && !up.isNeverPassable()) {
 
             chooseDirection.add(up);
         }
@@ -177,8 +119,8 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
 
                         if (enemy.isGhosting()) {
 
-                            nextLocation((EnemyLvL4) enemy, i, j);
-                            currentLocation((EnemyLvL4) enemy, i + 1, j);
+                            currentLocation((EnemyLvL4) enemy, i, j);
+                            nextLocation((EnemyLvL4) enemy, i + 1, j);
                         } else {
                             gameBoardCreator.gameComponents[i][j] = new FieldCell();
 
@@ -189,8 +131,8 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
 
                         if (enemy.isGhosting()) {
 
-                            nextLocation((EnemyLvL4) enemy, i, j);
-                            currentLocation((EnemyLvL4) enemy, i - 1, j);
+                            currentLocation((EnemyLvL4) enemy, i, j);
+                            nextLocation((EnemyLvL4) enemy, i - 1, j);
                         } else {
                             gameBoardCreator.gameComponents[i][j] = new FieldCell();
 
@@ -201,8 +143,8 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
 
                         if (enemy.isGhosting()) {
 
-                            nextLocation((EnemyLvL4) enemy, i, j);
-                            currentLocation((EnemyLvL4) enemy, i, j + 1);
+                            currentLocation((EnemyLvL4) enemy, i, j);
+                            nextLocation((EnemyLvL4) enemy, i, j + 1);
                         } else {
                             gameBoardCreator.setGameComponents(i, j, new FieldCell());
 
@@ -213,8 +155,8 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
 
                         if (enemy.isGhosting()) {
 
-                            nextLocation((EnemyLvL4) enemy, i, j);
-                            currentLocation((EnemyLvL4) enemy, i, j - 1);
+                            currentLocation((EnemyLvL4) enemy, i, j);
+                            nextLocation((EnemyLvL4) enemy, i, j - 1);
                         } else {
                             gameBoardCreator.setGameComponents(i, j, new FieldCell());
 
@@ -226,24 +168,6 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
                 } else {
 
                     round.put(enemy, round.get(enemy) + 1);
-//                    if (enemy.type.equals("enemyLvL4")) {
-//                        if (up.type.equals("wall") || up.type.equals("obstacle")) {
-//                            up.passable = false;
-//                            chooseDirection.remove(up);
-//                        }
-//                        if (down.type.equals("wall") || down.type.equals("obstacle")) {
-//                            down.passable = false;
-//                            chooseDirection.remove(down);
-//                        }
-//                        if (right.type.equals("wall") || right.type.equals("obstacle")) {
-//                            right.passable = false;
-//                            chooseDirection.remove(right);
-//                        }
-//                        if (left.type.equals("wall") || left.type.equals("obstacle")) {
-//                            left.passable = false;
-//                            chooseDirection.remove(left);
-//                        }
-//                    }
                     int randomNum = getRandomDirection();
                     movingEnemyRandomly.move(gameBoardCreator, i, j, enemy, randomNum, chooseDirection);
                     if (round.get(enemy) == 9) {
@@ -255,20 +179,18 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
     }
 
 
-    private void currentLocation(Enemy enemy, int i, int j) {
+    private void nextLocation(Enemy enemy, int i, int j) {
         if (!gameBoardCreator.gameComponents[i][j].isNeverPassable()) {
 
             enemy.setDisappearedObject(gameBoardCreator.gameComponents[i][j]);
         }
     }
 
-    private void nextLocation(EnemyLvL4 enemy, int i, int j) {
+    private void currentLocation(Enemy enemy, int i, int j) {
 
-        enemy.disappearedObject.setPassable(false);
 
-        gameBoardCreator.setGameComponents(i, j, enemy.disappearedObject);
-        gameBoardCreator.gameComponents[i][j].setPassable(false);
-        enemy.disappearedObject = null;
+        gameBoardCreator.setGameComponents(i, j, enemy.getDisappearedObject());
+        enemy.setDisappearedObject(new FieldCell());
 
 
     }
