@@ -1,4 +1,6 @@
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Sun on 06/06/2018.
@@ -21,5 +23,17 @@ public class EnemyLvL1 extends Enemy implements Serializable {
         passableObjects.add("FieldCell");
         passableObjects.add("Player");
 
+    }
+
+    @Override
+    void move(GameBoardCreator gameBoardCreator, int i, int j, ArrayList chooseDirection) {
+        int randomNum = gameBoardCreator.enemyMove.getRandomDirection();
+        if (randomNum != -1) {
+            try {
+                gameBoardCreator.movingEnemyRandomly.move(gameBoardCreator, i, j, this, randomNum, chooseDirection);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

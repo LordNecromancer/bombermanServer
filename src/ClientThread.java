@@ -201,8 +201,10 @@ public class ClientThread extends Thread implements Serializable {
     }
 
     void sendPlayerLocation() throws IOException {
-        send("#playerX$" + player.getPlayerPositionX());
-        send("#playerY$" + player.getPlayerPositionY());
+        if(player.isAlive()) {
+            send("#playerX$" + player.getPlayerPositionX());
+            send("#playerY$" + player.getPlayerPositionY());
+        }
     }
 
 

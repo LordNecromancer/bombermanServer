@@ -1,8 +1,6 @@
 import java.io.Serializable;
 
-/**
- * Created by Sun on 06/06/2018.
- */
+
 public abstract class GameComponent implements Serializable {
     private static final long serialVersionUID = 1114799434505296969L;
 

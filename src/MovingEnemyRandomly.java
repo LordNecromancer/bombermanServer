@@ -6,11 +6,17 @@ import java.util.ArrayList;
  * Created by Sun on 07/25/2018.
  */
 public class MovingEnemyRandomly implements Serializable {
+    private static final long serialVersionUID = 1113819434508676969L;
+
     GameBoardCreator gameBoardCreator;
 
-    public synchronized void move(GameBoardCreator gameBoardCreator, int i, int j, Enemy enemy, int randomNum, ArrayList<GameComponent> chooseDirection) throws IOException {
-
+    public MovingEnemyRandomly(GameBoardCreator gameBoardCreator) {
         this.gameBoardCreator = gameBoardCreator;
+    }
+
+    synchronized void move(GameBoardCreator gameBoardCreator, int i, int j, Enemy enemy, int randomNum, ArrayList<GameComponent> chooseDirection) throws IOException {
+
+       // this.gameBoardCreator = gameBoardCreator;
         GameComponent up = gameBoardCreator.gameComponents[i - 1][j];
         GameComponent right = gameBoardCreator.gameComponents[i][j + 1];
         GameComponent down = gameBoardCreator.gameComponents[i + 1][j];

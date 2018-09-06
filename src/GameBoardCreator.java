@@ -21,6 +21,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
     private static long bombExplosionTime = 5;
     EnemyMovementThread enemyMove = new EnemyMovementThread(this);
     EnemyMovementThreadTypeTwo enemyMove2 = new EnemyMovementThreadTypeTwo(this);
+    MovingEnemyRandomly movingEnemyRandomly=new MovingEnemyRandomly(this);
     private boolean isMoving = false;
     private boolean threadActive;
     ArrayList<Enemy> enemies = new ArrayList<>();
@@ -38,7 +39,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
         this.width = width;
         this.height = height;
         this.level = level;
-        this.level = 4;
+        this.level = 2;
         this.enemyLevelMap = game.enemyLevelMap;
         this.gameTime = new Time(300);
         isMoving = false;
@@ -448,12 +449,13 @@ public class GameBoardCreator extends JFrame implements Serializable {
     }
 
     void updatePlayerPosition(Player player) throws IOException {
+        game.players.remove(player);
+
         synchronized (gameComponents) {
             for (int i = 0; i < game.players.size(); i++) {
                 gameComponents[game.players.get(i).getPlayerPositionX()][game.players.get(i).getPlayerPositionY()] = new FieldCell();
 
             }
-            game.players.remove(player);
             for (int i = 0; i < game.players.size(); i++) {
                 gameComponents[game.players.get(i).getPlayerPositionX()][game.players.get(i).getPlayerPositionY()] = game.players.get(i);
                 game.players.get(i).getClient().sendPlayerLocation();

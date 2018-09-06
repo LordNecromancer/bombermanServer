@@ -17,6 +17,7 @@ public abstract class Enemy extends GameComponent implements Serializable {
         super.setNeverPassable(true);
     }
 
+    abstract void move(GameBoardCreator gameBoardCreator,int i,int j,ArrayList chooseDirection);
     @Override
     public void destroy(Player player, int i, int j) {
         Enemy enemy = this;
