@@ -10,13 +10,13 @@ public class MovingEnemyRandomly implements Serializable {
 
     GameBoardCreator gameBoardCreator;
 
-    public MovingEnemyRandomly(GameBoardCreator gameBoardCreator) {
+    MovingEnemyRandomly(GameBoardCreator gameBoardCreator) {
         this.gameBoardCreator = gameBoardCreator;
     }
 
     synchronized void move(GameBoardCreator gameBoardCreator, int i, int j, Enemy enemy, int randomNum, ArrayList<GameComponent> chooseDirection) throws IOException {
 
-       // this.gameBoardCreator = gameBoardCreator;
+        // this.gameBoardCreator = gameBoardCreator;
         GameComponent up = gameBoardCreator.gameComponents[i - 1][j];
         GameComponent right = gameBoardCreator.gameComponents[i][j + 1];
         GameComponent down = gameBoardCreator.gameComponents[i + 1][j];

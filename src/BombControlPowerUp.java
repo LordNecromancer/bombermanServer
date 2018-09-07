@@ -9,7 +9,7 @@ public class BombControlPowerUp extends PowerUps implements Serializable {
     GameBoardCreator gameBoardCreator;
     Player player;
 
-    public BombControlPowerUp(GameBoardCreator gameBoardCreator) {
+    BombControlPowerUp(GameBoardCreator gameBoardCreator) {
 
         this.gameBoardCreator = gameBoardCreator;
         super.setType(type);

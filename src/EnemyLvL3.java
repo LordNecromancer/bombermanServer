@@ -2,16 +2,13 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
- * Created by Sun on 06/06/2018.
- */
-public class EnemyLvL3 extends Enemy implements Serializable {
+class EnemyLvL3 extends Enemy implements Serializable {
     private static final long serialVersionUID = 1193799634508296969L;
 
     final private String type = "enemyLvL3";
     private int level = 3;
     static int sleep = 4;
-    int round=-1;
+    private int round = -1;
 
     @Override
     void move(GameBoardCreator gameBoardCreator, int i, int j, ArrayList chooseDirection) {
@@ -35,15 +32,13 @@ public class EnemyLvL3 extends Enemy implements Serializable {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    }
-
-                    else if (player.getPlayerPositionX() > i && chooseDirection.contains(down)) {
+                    } else if (player.getPlayerPositionX() > i && chooseDirection.contains(down)) {
 
 
                         if (this.isGhosting()) {
 
-                            gameBoardCreator.enemyMove2.currentLocation( this, i, j);
-                            gameBoardCreator.enemyMove2.nextLocation( this, i + 1, j);
+                            gameBoardCreator.enemyMove2.currentLocation(this, i, j);
+                            gameBoardCreator.enemyMove2.nextLocation(this, i + 1, j);
                         } else {
                             gameBoardCreator.gameComponents[i][j] = new FieldCell();
 
@@ -60,7 +55,7 @@ public class EnemyLvL3 extends Enemy implements Serializable {
                             gameBoardCreator.gameComponents[i][j] = new FieldCell();
 
                         }
-                        gameBoardCreator.gameComponents[i - 1][j] =this;
+                        gameBoardCreator.gameComponents[i - 1][j] = this;
 
                     } else if (player.getPlayerPositionY() > j && chooseDirection.contains(right)) {
 
@@ -86,7 +81,7 @@ public class EnemyLvL3 extends Enemy implements Serializable {
                         }
                         gameBoardCreator.setGameComponents(i, j - 1, this);
                     } else {
-                        round= 0;
+                        round = 0;
                     }
                 } else {
 
@@ -98,14 +93,14 @@ public class EnemyLvL3 extends Enemy implements Serializable {
                         e.printStackTrace();
                     }
                     if (round == 9) {
-                        round= -1;
+                        round = -1;
                     }
                 }
             }
         }
     }
 
-    public EnemyLvL3() {
+    EnemyLvL3() {
         super.setLevel(level);
         super.setType(type);
         super.setSleep(sleep);

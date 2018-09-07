@@ -17,7 +17,7 @@ public class BombCell extends GameComponent implements Serializable {
     private BombThread bombThread;
     private Player player;
 
-    public BombCell(Player player, int bombRadius, long bombExplosionTime, GameBoardCreator gameBoardCreator, int x, int y) {
+    BombCell(Player player, int bombRadius, long bombExplosionTime, GameBoardCreator gameBoardCreator, int x, int y) {
         super.setType(type);
         super.setPassable(false);
         super.setNeverPassable(true);
@@ -47,29 +47,20 @@ public class BombCell extends GameComponent implements Serializable {
         this.gameBoardCreator = gameBoardCreator;
     }
 
-    public int getBombRadius() {
+    int getBombRadius() {
         return bombRadius;
     }
 
-    public void setBombRadius(int bombRadius) {
-        this.bombRadius = bombRadius;
-    }
 
-    public long getBombExplosionTime() {
+    long getBombExplosionTime() {
         return bombExplosionTime;
     }
 
-    public void setBombExplosionTime(long bombExplosionTime) {
-        this.bombExplosionTime = bombExplosionTime;
-    }
 
-    public BombThread getBombThread() {
+    BombThread getBombThread() {
         return bombThread;
     }
 
-    public void setBombThread(BombThread bombThread) {
-        this.bombThread = bombThread;
-    }
 
     public Player getPlayer() {
         return player;

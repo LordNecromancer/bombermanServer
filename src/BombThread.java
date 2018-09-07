@@ -13,7 +13,7 @@ public class BombThread extends Thread implements Serializable {
     private Player player;
     private boolean isActive;
 
-    public BombThread(Player player, BombCell bombCell, GameBoardCreator gameBoardCreator, int x, int y) {
+    BombThread(Player player, BombCell bombCell, GameBoardCreator gameBoardCreator, int x, int y) {
         this.bomb = bombCell;
         this.gameBoardCreator = gameBoardCreator;
         this.X = x;
@@ -38,7 +38,7 @@ public class BombThread extends Thread implements Serializable {
         }
     }
 
-    public void explode() throws InterruptedException, IOException {
+    void explode() throws InterruptedException, IOException {
 
         if (isActive) {
 

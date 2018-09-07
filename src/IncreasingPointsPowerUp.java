@@ -10,7 +10,7 @@ public class IncreasingPointsPowerUp extends PowerUps implements Serializable {
 
     GameBoardCreator gameBoardCreator;
 
-    public IncreasingPointsPowerUp(GameBoardCreator gameBoardCreator) {
+    IncreasingPointsPowerUp(GameBoardCreator gameBoardCreator) {
         super.setType(type);
         this.gameBoardCreator = gameBoardCreator;
     }

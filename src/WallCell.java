@@ -7,7 +7,7 @@ public class WallCell extends GameComponent implements Serializable {
     private static final long serialVersionUID = 1119742734515296969L;
 
 
-    public WallCell() {
+    WallCell() {
 
         super.setType(type);
         super.setPassable(false);

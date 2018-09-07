@@ -22,19 +22,11 @@ public class ClientThread extends Thread implements Serializable {
     private boolean isActive = true;
 
 
-    public ClientThread(Socket socket) throws IOException {
+    ClientThread(Socket socket) throws IOException {
         client = this;
         this.socket = socket;
         objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 
-    }
-
-    public static ClientThread getClient() {
-        return client;
-    }
-
-    public static void setClient(ClientThread client) {
-        ClientThread.client = client;
     }
 
 
@@ -61,8 +53,6 @@ public class ClientThread extends Thread implements Serializable {
 
                     System.out.println(line);
 
-                    //  line = dataInputStream.readUTF();
-                    // System.out.println(line);
                     if (line.startsWith("#player$")) {
 
                     }
@@ -96,21 +86,13 @@ public class ClientThread extends Thread implements Serializable {
                         GameBoardCreator.getGameBoardCreator().setPlayerPosition(player, playerX, playerY);
                         //  GameBoardCreator.gameBoardCreator.player.playerPositionY=Integer.valueOf(line.substring(8));
                     }
-//                        } else {
-//                            handlingUserMassages(line);
-//                        }
                 }
 
 
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
-//                try {
-//                 //   closeConnection();
-//                  //  break;
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
+//
             }
 
 
@@ -123,10 +105,6 @@ public class ClientThread extends Thread implements Serializable {
                 justJoinedChatRoom = true;
                 send("JoinedGameRoom$");
 
-            } else {
-
-
-                //   Main.sendToAll(this, name + "  :  " + line);
             }
         } else {
 
@@ -165,7 +143,6 @@ public class ClientThread extends Thread implements Serializable {
         send("JoinedGameRoom$");
         gameRoom.start();
         sendTime();
-        System.out.println(gameRoom.width);
 
         send("#width$" + gameRoom.width);
         send("#height$" + gameRoom.height);
@@ -201,28 +178,17 @@ public class ClientThread extends Thread implements Serializable {
     }
 
     void sendPlayerLocation() throws IOException {
-        if(player.isAlive()) {
+        if (player.isAlive()) {
             send("#playerX$" + player.getPlayerPositionX());
             send("#playerY$" + player.getPlayerPositionY());
         }
     }
 
 
-    public Socket getSocket() {
-        return socket;
-    }
-
-    public void setSocket(Socket socket) {
-        this.socket = socket;
-    }
-
-    public ObjectOutputStream getObjectOutputStream() {
+    ObjectOutputStream getObjectOutputStream() {
         return objectOutputStream;
     }
 
-    public void setObjectOutputStream(ObjectOutputStream objectOutputStream) {
-        this.objectOutputStream = objectOutputStream;
-    }
 
     public Player getPlayer() {
         return player;

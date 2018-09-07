@@ -60,79 +60,68 @@ public class Player extends GameComponent implements Serializable {
         }
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getPlayerPositionX() {
+    int getPlayerPositionX() {
         return playerPositionX;
     }
 
-    public void setPlayerPositionX(int playerPositionX) {
+    void setPlayerPositionX(int playerPositionX) {
         this.playerPositionX = playerPositionX;
     }
 
-    public int getPlayerPositionY() {
+    int getPlayerPositionY() {
         return playerPositionY;
     }
 
-    public void setPlayerPositionY(int playerPositionY) {
+    void setPlayerPositionY(int playerPositionY) {
         this.playerPositionY = playerPositionY;
     }
 
-    public int getScore() {
+    int getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    void setScore(int score) {
         this.score = score;
     }
 
-    public boolean isBombSet() {
+    boolean isBombSet() {
         return bombSet;
     }
 
-    public void setBombSet(boolean bombSet) {
+    void setBombSet(boolean bombSet) {
         this.bombSet = bombSet;
     }
 
-    public boolean isBombControl() {
+    boolean isBombControl() {
         return bombControl;
     }
 
-    public void setBombControl(boolean bombControl) {
+    void setBombControl(boolean bombControl) {
         this.bombControl = bombControl;
     }
 
-    public long getPlayerSleep() {
+    long getPlayerSleep() {
         return playerSleep;
     }
 
-    public void setPlayerSleep(long playerSleep) {
+    void setPlayerSleep(long playerSleep) {
         this.playerSleep = playerSleep;
     }
 
-    public ClientThread getClient() {
+    ClientThread getClient() {
         return client;
     }
 
-    public void setClient(ClientThread client) {
-        this.client = client;
-    }
 
-    public BombCell getCurrentBomb() {
+    BombCell getCurrentBomb() {
         return currentBomb;
     }
 
-    public void setCurrentBomb(BombCell currentBomb) {
-        this.currentBomb = currentBomb;
-    }
-
-    public ArrayList<BombCell> getBombs() {
+    ArrayList<BombCell> getBombs() {
         return bombs;
     }
 
@@ -150,35 +139,35 @@ public class Player extends GameComponent implements Serializable {
         return type;
     }
 
-    public boolean isAlive() {
+    boolean isAlive() {
         return isAlive;
     }
 
-    public void setAlive(boolean alive) {
+    void setAlive(boolean alive) {
         isAlive = alive;
     }
 
-    public int getBombRadius() {
+    int getBombRadius() {
         return bombRadius;
     }
 
-    public void setBombRadius(int bombRadius) {
+    void setBombRadius(int bombRadius) {
         this.bombRadius = bombRadius;
     }
 
-    public int getBombNum() {
+    int getBombNum() {
         return bombNum;
     }
 
-    public void setBombNum(int bombNum) {
+    void setBombNum(int bombNum) {
         this.bombNum = bombNum;
     }
 
-    public int getBombCount() {
+    int getBombCount() {
         return bombCount;
     }
 
-    public void setBombCount(int bombCount) {
+    void setBombCount(int bombCount) {
         this.bombCount = bombCount;
     }
 }

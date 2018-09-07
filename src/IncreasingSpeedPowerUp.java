@@ -10,7 +10,7 @@ public class IncreasingSpeedPowerUp extends PowerUps implements Serializable {
     GameBoardCreator gameBoardCreator;
     Player player;
 
-    public IncreasingSpeedPowerUp(GameBoardCreator gameBoardCreator) {
+    IncreasingSpeedPowerUp(GameBoardCreator gameBoardCreator) {
         this.gameBoardCreator = gameBoardCreator;
         this.player = player;
         super.setType(type);

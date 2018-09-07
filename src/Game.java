@@ -19,7 +19,7 @@ public class Game implements Serializable {
     Map<Integer, ArrayList<Enemy>> enemyLevelMap = new HashMap<>();
 
 
-    public Game(String roomName, int width, int height) throws IOException {
+    Game(String roomName, int width, int height) throws IOException {
         this.roomName = roomName;
         this.width = width;
         this.height = height;
@@ -41,13 +41,13 @@ public class Game implements Serializable {
 
     }
 
-    public void start() throws IOException {
+    void start() throws IOException {
         gameBoardCreator = new GameBoardCreator(this, level, width, height);
         gameBoardCreator.init();
         gameBoardCreator.players = players;
     }
 
-    public void gotoNextLevel() throws IOException {
+    void gotoNextLevel() throws IOException {
         gameBoardCreator.level = gameBoardCreator.level + 1;
         gameBoardCreator.gameComponents = null;
         gameBoardCreator.init();
@@ -74,12 +74,4 @@ public class Game implements Serializable {
 
 
     }
-//
-//    public void sendTime(Time gameTime) throws IOException {
-//        for (int i = 0; i <members.size() ; i++) {
-//            members.get(i).send("#time$"+String.valueOf(gameTime.getTime()));
-//            System.out.println(gameTime.getTime());
-//
-//        }
-//    }
 }

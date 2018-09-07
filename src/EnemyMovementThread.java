@@ -17,7 +17,7 @@ public class EnemyMovementThread extends Thread implements Serializable {
     private GameComponent down;
     private GameComponent right;
     private GameComponent left;
-    private MovingEnemyRandomly movingEnemyRandomly ;
+    private MovingEnemyRandomly movingEnemyRandomly;
     private int k = 0;
     private ArrayList<GameComponent> chooseDirection = new ArrayList<>();
     private Map<Enemy, Integer> round = new HashMap<>();
@@ -58,26 +58,10 @@ public class EnemyMovementThread extends Thread implements Serializable {
                             k++;
 
 
-                            if(enemy.getSleep()==EnemyLvL1.sleep){
-                                enemy.move(gameBoardCreator,i,j,chooseDirection);
+                            if (enemy.getSleep() == EnemyLvL1.sleep) {
+                                enemy.move(gameBoardCreator, i, j, chooseDirection);
                             }
-//                            if (enemy.getType().equals("enemyLvL1")) {
-//
-//                                try {
-//                                    moveEnemyLevelOne((EnemyLvL1) gameBoardCreator.gameComponents[i][j], i, j);
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
-//                                }
-//
-//                            }
-//
-//                            if (enemy.getType().equals("enemyLvL2")) {
-//                                try {
-//                                    moveEnemyLevelTwo((EnemyLvL2) enemy, i, j);
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
+
                         }
                     }
                 }
@@ -121,27 +105,6 @@ public class EnemyMovementThread extends Thread implements Serializable {
     }
 
 
-    private void moveEnemyLevelTwo(EnemyLvL2 enemy, int i, int j) throws IOException {
-
-
-//        if (round.get(enemy) == -1) {
-//            moveEnemyLevelTwoSmartly(enemy, i, j);
-//        } else {
-//
-//            round.put(enemy, round.get(enemy) + 1);
-//            int randomNum = getRandomDirection();
-//            if (randomNum != -1) {
-//                movingEnemyRandomly.move(gameBoardCreator, i, j, enemy, randomNum, chooseDirection);
-//            }
-//            if (round.get(enemy) == 9) {
-//                round.put(enemy, -1);
-//            }
-//        }
-    }
-
-
-
-
     Player findTarget(int i, int j) {
         if (gameBoardCreator.players.size() > 0) {
             Player player = null;
@@ -167,7 +130,7 @@ public class EnemyMovementThread extends Thread implements Serializable {
     }
 
 
-     int getRandomDirection() {
+    int getRandomDirection() {
 
         Random random = new Random();
 

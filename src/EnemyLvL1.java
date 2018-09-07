@@ -2,10 +2,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
- * Created by Sun on 06/06/2018.
- */
-public class EnemyLvL1 extends Enemy implements Serializable {
+class EnemyLvL1 extends Enemy implements Serializable {
     private static final long serialVersionUID = 1119342734505296969L;
 
 
@@ -14,7 +11,7 @@ public class EnemyLvL1 extends Enemy implements Serializable {
     static int sleep = 8;
 
 
-    public EnemyLvL1() {
+    EnemyLvL1() {
         super.setLevel(level);
         super.setType(type);
         super.setSleep(sleep);

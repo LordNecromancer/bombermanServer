@@ -11,7 +11,7 @@ public class DecreasingPointsPoison extends Poison implements Serializable {
 
     GameBoardCreator gameBoardCreator;
 
-    public DecreasingPointsPoison(GameBoardCreator gameBoardCreator) {
+    DecreasingPointsPoison(GameBoardCreator gameBoardCreator) {
         super.setType(type);
         this.gameBoardCreator = gameBoardCreator;
     }

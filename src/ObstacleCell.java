@@ -14,7 +14,7 @@ public class ObstacleCell extends GameComponent implements Serializable {
     Poison poison = null;
     GameBoardCreator gameBoardCreator = GameBoardCreator.getGameBoardCreator();
 
-    public ObstacleCell() {
+    ObstacleCell() {
         super.setType(type);
         super.setPassable(false);
 

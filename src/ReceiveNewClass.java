@@ -1,6 +1,5 @@
 import com.sun.org.apache.bcel.internal.util.ClassLoader;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -8,13 +7,10 @@ import java.io.IOException;
  * Created by Sun on 09/01/2018.
  */
 public class ReceiveNewClass extends Thread {
-    int sleep;
-    int level;
+
     String type;
-    Class cls = null;
-    boolean isGhosting;
-    ClientThread client;
-    ImageIcon image;
+    private Class cls = null;
+    private ClientThread client;
     GameBoardCreator gameBoardCreator;
 
 
@@ -36,6 +32,7 @@ public class ReceiveNewClass extends Thread {
             try {
                 cls = classLoader.loadClass(finalFileName);
                 client.sendObject(cls, false);
+                attachToProgram();
 
 
             } catch (ClassNotFoundException e) {
@@ -47,26 +44,37 @@ public class ReceiveNewClass extends Thread {
         }
     }
 
-    private void extractFields() {
+    private void attachToProgram() {
         try {
-            sleep = cls.getClass().getDeclaredField("sleep").getInt(cls.newInstance());
-            level = cls.getClass().getDeclaredField("level").getInt(cls.newInstance());
-            type = (String) cls.getClass().getDeclaredField("type").get(cls.newInstance());
-            isGhosting = cls.getClass().getDeclaredField("isGhosting").getBoolean(cls.newInstance());
-            image = (ImageIcon) cls.getClass().getDeclaredField("image").get(cls.newInstance());
-
-
-        } catch (NoSuchFieldException e) {
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            Enemy enemy = (Enemy) cls.newInstance();
+            if (enemy.getLevel() > gameBoardCreator.getMaximumEnemyLevel()) {
+                gameBoardCreator.setmaximumEnemyLevel(enemy.getLevel());
+            }
+            gameBoardCreator.getGame().placeEnemyInLevelArray(enemy);
         } catch (InstantiationException e) {
             e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
-
     }
 
-    private void createUserInterface() throws ClassNotFoundException {
+//    private void extractFields() {
+//        try {
+//            sleep = cls.getClass().getDeclaredField("sleep").getInt(cls.newInstance());
+//            level = cls.getClass().getDeclaredField("level").getInt(cls.newInstance());
+//            type = (String) cls.getClass().getDeclaredField("type").get(cls.newInstance());
+//            isGhosting = cls.getClass().getDeclaredField("isGhosting").getBoolean(cls.newInstance());
+//            image = (ImageIcon) cls.getClass().getDeclaredField("image").get(cls.newInstance());
+//
+//
+//        } catch (NoSuchFieldException e) {
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        } catch (InstantiationException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
-    }
 }
 

@@ -2,23 +2,20 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
- * Created by Sun on 06/06/2018.
- */
-public class EnemyLvL2 extends Enemy implements Serializable {
+class EnemyLvL2 extends Enemy implements Serializable {
     private static final long serialVersionUID = 1193799734508296969L;
 
     final private String type = "enemyLvL2";
     private int level = 2;
     static int sleep = 8;
-    private int round=-1;
+    private int round = -1;
 
     @Override
     void move(GameBoardCreator gameBoardCreator, int i, int j, ArrayList chooseDirection) {
         try {
             if (round == -1) {
 
-                moveEnemyLevelTwoSmartly( i, j,chooseDirection);
+                moveEnemyLevelTwoSmartly(i, j, chooseDirection);
 
             } else {
 
@@ -42,9 +39,9 @@ public class EnemyLvL2 extends Enemy implements Serializable {
     }
 
 
-    private void moveEnemyLevelTwoSmartly( int i, int j,ArrayList chooseDirection) throws IOException {
+    private void moveEnemyLevelTwoSmartly(int i, int j, ArrayList chooseDirection) throws IOException {
         Player player = gameBoardCreator.enemyMove.findTarget(i, j);
-       GameComponent up = gameBoardCreator.gameComponents[i - 1][j];
+        GameComponent up = gameBoardCreator.gameComponents[i - 1][j];
         GameComponent right = gameBoardCreator.gameComponents[i][j + 1];
         GameComponent down = gameBoardCreator.gameComponents[i + 1][j];
         GameComponent left = gameBoardCreator.gameComponents[i][j - 1];
@@ -56,8 +53,7 @@ public class EnemyLvL2 extends Enemy implements Serializable {
                     gameBoardCreator.gameComponents[player.getPlayerPositionX()][player.getPlayerPositionY()] = this;
                     gameBoardCreator.gameComponents[i][j] = new FieldCell();
                     gameBoardCreator.killPlayer(player);
-                }
-               else if (player.getPlayerPositionX() > i && chooseDirection.contains(down)) {
+                } else if (player.getPlayerPositionX() > i && chooseDirection.contains(down)) {
 
                     gameBoardCreator.gameComponents[i + 1][j] = this;
                     gameBoardCreator.gameComponents[i][j] = new FieldCell();
@@ -79,14 +75,14 @@ public class EnemyLvL2 extends Enemy implements Serializable {
                     gameBoardCreator.gameComponents[i][j] = new FieldCell();
 
                 } else {
-                    round=0;
+                    round = 0;
                     gameBoardCreator.movingEnemyRandomly.move(gameBoardCreator, i, j, this, gameBoardCreator.enemyMove.getRandomDirection(), chooseDirection);
                 }
             }
         }
     }
 
-    public EnemyLvL2() {
+    EnemyLvL2() {
         super.setLevel(level);
         super.setType(type);
         super.setSleep(sleep);
