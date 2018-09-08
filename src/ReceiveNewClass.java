@@ -1,7 +1,6 @@
 import com.sun.org.apache.bcel.internal.util.ClassLoader;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Created by Sun on 09/01/2018.
@@ -14,23 +13,28 @@ public class ReceiveNewClass extends Thread {
     GameBoardCreator gameBoardCreator;
 
 
-    ReceiveNewClass(GameBoardCreator gameBoardCreator, ClientThread client) {
+    ReceiveNewClass( ClientThread client) throws IOException, ClassNotFoundException {
         this.client = client;
         this.gameBoardCreator = gameBoardCreator;
         loadNewClass();
     }
 
-    private void loadNewClass() {
+    private void loadNewClass() throws IOException, ClassNotFoundException {
         File file = new File("C:/Users/Sun/IdeaProjects/BombermanGameServer/update");
         File[] files = file.listFiles();
         if (files.length > 0) {
             String finalFileName = files[0].getName();
+//            FileInputStream fileInputStream=new FileInputStream(files[0]);
+//             objectInputStream=new ObjectInputStream(fileInputStream);
+//            Class clss=(Class) objectInputStream.readObject();
+           // System.out.println(clss.getName());
             //Class clss=(Class) (files[0]);
 
             ClassLoader classLoader = new ClassLoader();
 
             try {
                 cls = classLoader.loadClass(finalFileName);
+                System.out.println(cls.getName());
                 client.sendObject(cls, false);
                 attachToProgram();
 
@@ -48,7 +52,7 @@ public class ReceiveNewClass extends Thread {
         try {
             Enemy enemy = (Enemy) cls.newInstance();
             if (enemy.getLevel() > gameBoardCreator.getMaximumEnemyLevel()) {
-                gameBoardCreator.setmaximumEnemyLevel(enemy.getLevel());
+                gameBoardCreator.setMaximumEnemyLevel(enemy.getLevel());
             }
             gameBoardCreator.getGame().placeEnemyInLevelArray(enemy);
         } catch (InstantiationException e) {

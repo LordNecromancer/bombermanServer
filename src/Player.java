@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.TimerTask;
 
 
 public class Player extends GameComponent implements Serializable {
@@ -22,6 +24,10 @@ public class Player extends GameComponent implements Serializable {
     private int bombRadius = 1;
     private int bombNum = 1;
     private int bombCount = 1;
+    boolean hasShield = true;
+    private boolean usedShield = false;
+    private Time shieldTime = new Time(30);
+
 
 
     public Player(String name, ClientThread client) {
@@ -35,6 +41,7 @@ public class Player extends GameComponent implements Serializable {
     void die() {
         this.isAlive = false;
         this.bombSet = false;
+
     }
 
     void addScore(int score) throws IOException {
@@ -131,8 +138,57 @@ public class Player extends GameComponent implements Serializable {
 
     @Override
     public void destroy(Player player, int i, int j) {
-        player.die();
-        GameBoardCreator.getGameBoardCreator().gameComponents[i][j] = new FieldCell();
+        try {
+            player.killPlayer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    void killPlayer() throws IOException {
+        if (!hasShield) {
+
+        if (isAlive()) {
+
+
+                this.getClient().send("#lost$");
+            GameBoardCreator.getGameBoardCreator().gameComponents[playerPositionX][playerPositionY] = new FieldCell();
+
+
+            die();
+            }
+        }else {
+                setShieldTimer();
+            }
+
+
+    }
+    private void setShieldTimer() {
+        if (!usedShield) {
+            usedShield = true;
+            shieldTime = new Time(30);
+            java.util.Timer timer = new java.util.Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    keepShieldAbility();
+                }
+            };
+            timer.scheduleAtFixedRate(timerTask, 0, 1000);
+        }
+    }
+
+
+    private void keepShieldAbility() {
+
+
+        if (shieldTime.getTime() > 0) {
+            shieldTime.setTime(shieldTime.getTime() - 1);
+            // refreshTimer(gameTime.getTime());
+        } else {
+            hasShield = false;
+            usedShield = false;
+
+        }
     }
 
     public String getType() {
@@ -169,5 +225,8 @@ public class Player extends GameComponent implements Serializable {
 
     void setBombCount(int bombCount) {
         this.bombCount = bombCount;
+    }
+    void putPlayerOnShield() {
+        hasShield = true;
     }
 }

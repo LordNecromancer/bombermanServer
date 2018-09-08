@@ -261,13 +261,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
     }
 
 
-    void killPlayer(Player player) throws IOException {
-        if (player.isAlive()) {
 
-            player.getClient().send("#lost$");
-        }
-        player.die();
-    }
 
 
     void checkIfIsStatChanger(Player player, GameComponent cell) throws IOException {
@@ -472,11 +466,13 @@ public class GameBoardCreator extends JFrame implements Serializable {
         return maximumEnemyLevel;
     }
 
-    void setmaximumEnemyLevel(int maximumEnemyLevel) {
+    void setMaximumEnemyLevel(int maximumEnemyLevel) {
         this.maximumEnemyLevel = maximumEnemyLevel;
     }
 
     Game getGame() {
         return game;
     }
+
+
 }

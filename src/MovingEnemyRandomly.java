@@ -21,15 +21,16 @@ public class MovingEnemyRandomly implements Serializable {
         GameComponent right = gameBoardCreator.gameComponents[i][j + 1];
         GameComponent down = gameBoardCreator.gameComponents[i + 1][j];
         GameComponent left = gameBoardCreator.gameComponents[i][j - 1];
-        if (randomNum != -1) {
+        synchronized (gameBoardCreator.gameComponents) {
+
+            if (randomNum != -1) {
             if (chooseDirection.get(randomNum).getType().equals("player")) {
                 Player player = (Player) chooseDirection.get(randomNum);
-                gameBoardCreator.killPlayer(player);
+                player.killPlayer();
 
             }
 
-            synchronized (gameBoardCreator.gameComponents) {
-                if (chooseDirection.get(randomNum) == up) {
+               else if (chooseDirection.get(randomNum) == up) {
 
                     if (up.getPassable() && !enemy.isGhosting()) {
                         gameBoardCreator.gameComponents[i][j] = new FieldCell();

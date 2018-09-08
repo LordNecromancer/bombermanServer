@@ -42,10 +42,12 @@ public class BombThread extends Thread implements Serializable {
 
         if (isActive) {
 
-            gameBoardCreator.gameComponents[X][Y] = new FieldCell();
+            if(!player.isBombSet() || player.getCurrentBomb() != bomb || !player.hasShield) {
+                gameBoardCreator.gameComponents[X][Y] = new FieldCell();
+            }
             if (player.isBombSet() && player.getCurrentBomb() == bomb) {
 
-                gameBoardCreator.killPlayer(player);
+                player.killPlayer();
 
             }
 

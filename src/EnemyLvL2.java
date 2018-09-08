@@ -50,9 +50,12 @@ class EnemyLvL2 extends Enemy implements Serializable {
             synchronized (gameBoardCreator.gameComponents) {
                 if (chooseDirection.contains(player)) {
 
-                    gameBoardCreator.gameComponents[player.getPlayerPositionX()][player.getPlayerPositionY()] = this;
-                    gameBoardCreator.gameComponents[i][j] = new FieldCell();
-                    gameBoardCreator.killPlayer(player);
+                    if (!player.hasShield) {
+
+                        gameBoardCreator.gameComponents[player.getPlayerPositionX()][player.getPlayerPositionY()] = this;
+                        gameBoardCreator.gameComponents[i][j] = new FieldCell();
+                    }
+                    player.killPlayer();
                 } else if (player.getPlayerPositionX() > i && chooseDirection.contains(down)) {
 
                     gameBoardCreator.gameComponents[i + 1][j] = this;

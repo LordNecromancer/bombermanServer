@@ -12,14 +12,15 @@ public class Main implements Serializable {
 
     public static void main(String[] args) throws IOException, NTLMException, ClassNotFoundException {
 
-//        ReceiveNewClass ReceiveNewClass =new ReceiveNewClass();
-//        ReceiveNewClass.start();
+
 
         int port = 8080;
         ServerSocket serverSocket = new ServerSocket(port);
         while (true) {
             Socket socket = serverSocket.accept();
             ClientThread clientThread = new ClientThread(socket);
+//            ReceiveNewClass ReceiveNewClass =new ReceiveNewClass(clientThread);
+//            ReceiveNewClass.start();
             sockets.add(clientThread);
 
             clientThread.start();

@@ -24,11 +24,14 @@ class EnemyLvL3 extends Enemy implements Serializable {
                 if (round == -1) {
 
                     if (chooseDirection.contains(player)) {
+                        if (!player.hasShield) {
 
-                        gameBoardCreator.gameComponents[player.getPlayerPositionX()][player.getPlayerPositionY()] = this;
-                        gameBoardCreator.gameComponents[i][j] = this.getDisappearedObject();
+
+                            gameBoardCreator.gameComponents[player.getPlayerPositionX()][player.getPlayerPositionY()] = this;
+                            gameBoardCreator.gameComponents[i][j] = this.getDisappearedObject();
+                        }
                         try {
-                            gameBoardCreator.killPlayer(player);
+                            player.killPlayer();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
